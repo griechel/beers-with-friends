@@ -5,3 +5,4 @@ import aws_exports from './src/aws-exports';
 
 AppRegistry.registerComponent('template', () => App);
 Amplify.configure(aws_exports);
+
