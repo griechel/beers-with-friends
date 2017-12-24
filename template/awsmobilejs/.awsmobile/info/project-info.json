@@ -7,16 +7,16 @@
 	"StartCommand": "npm run-script start",
 	"InitializationTime": "2017-12-20-11-08-28",
 	"LastConfigurationTime": "2017-12-20-11-08-43",
-	"LastNPMInstallTime": "",
+	"LastNPMInstallTime": "2017-12-24-10-58-05",
 	"FrontendLastBuildTime": "",
 	"LastPublishTime": "",
 	"BackendFormat": "yml",
-	"BackendLastBuildTime": "",
-	"BackendLastUpdateTime": "",
-	"BackendLastUpdateSuccessful": false,
+	"BackendLastBuildTime": "2017-12-24-11-05-50",
+	"BackendLastUpdateTime": "2017-12-24-11-05-53",
+	"BackendLastUpdateSuccessful": true,
 	"BackendProjectID": "6cfc7b5d-8443-4f84-957c-cdacaee3dc15",
 	"BackendProjectName": "beers-with-friends",
 	"BackendProjectConsoleUrl": "https://console.aws.amazon.com/mobilehub/home#/6cfc7b5d-8443-4f84-957c-cdacaee3dc15/build",
 	"BackendProjectCreationTime": "2017-12-20T19:09:02.504Z",
-	"BackendProjectLastUpdatedTime": "2017-12-20T19:09:02.504Z"
+	"BackendProjectLastUpdatedTime": "2017-12-24T19:05:51.098Z"
 }

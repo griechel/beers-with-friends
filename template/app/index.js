@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Tabs, Root } from './config/router';
+import { withAuthenticator } from 'aws-amplify-react-native';
 
 class App extends Component {
   render() {
@@ -7,4 +8,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withAuthenticator(App);
