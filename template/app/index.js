@@ -4,7 +4,10 @@ import { withAuthenticator } from 'aws-amplify-react-native';
 
 class App extends Component {
   render() {
-    return <Root />;
+    <View>
+      <Text>Welcome to the Facebook SDK for React Native!</Text>
+      <Login />
+     </View>
   }
 }
 
