@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     main: {
       flexDirection:'row',
       width:100+'%',
+      backgroundColor: 'white'
     },
     box1: {
       width:60,

@@ -4,7 +4,8 @@ import { View, StyleSheet } from 'react-native';
 export default class ScreenOne extends Component {
     render() {
         return (
-            <View style={styles.main} />
+            <View style={styles.main}>
+            </View>
         );
     }
 }

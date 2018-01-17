@@ -4,7 +4,7 @@ import InviteFriendItem from './InviteFriendItem';
 
 import { BestFriends, Friends, Groups } from '../config/data';
 
-export default class InviteFriendList extends Component {
+export default class AddGroupList extends Component {
 
     _renderEvent(item){
         return(
@@ -42,7 +42,6 @@ export default class InviteFriendList extends Component {
                     renderSectionHeader={({section})=> this.renderSectionHeader(section)}
                     ItemSeparatorComponent= {this.renderSeparator}
                     sections={[
-                        {data:Groups, title:'Groups'},
                         {data:BestFriends, title:'My Main Crew'},
                         {data:Friends, title:'I Guess I Like These People Too'}
                     ]}

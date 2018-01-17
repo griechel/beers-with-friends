@@ -31,7 +31,7 @@ export default class Friends extends Component {
                 >
                     <TouchableWithoutFeedback onPress={() => this.toggleModal()}>
                         <View style={styles.modal}>
-                        <AddGroupButton />
+                        <AddGroupButton navigation={this.props.navigation} action={this.toggleModal.bind(this)}/>
                         <AddFromContacts />
                         </View>
                     </TouchableWithoutFeedback>

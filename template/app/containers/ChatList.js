@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     main: {
         width:100+'%',
         height:100+'%',
-        backgroundColor: 'rgb(230,230,230)'
+        backgroundColor: 'rgb(230,230,230)',
+        marginTop:5
     }
 });

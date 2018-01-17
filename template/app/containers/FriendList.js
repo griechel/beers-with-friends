@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     main: {
         height:100+'%',
         width:100+'%',
-        backgroundColor: 'rgb(230,230,230)'
+        backgroundColor: 'rgb(230,230,230)',
     },
     sectionHeader: {
         backgroundColor:'rgba(220,220,220,0)',

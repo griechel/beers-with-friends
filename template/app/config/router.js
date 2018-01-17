@@ -14,6 +14,7 @@ import CreateEventTime from '../screens/CreateEventTime';
 import CreateEventInvites from '../screens/CreateEventInvites';
 import AddFriend from '../screens/AddFriend';
 import Settings from '../screens/Settings';
+import AddGroup from '../screens/AddGroup';
 
 export const FriendsStack = StackNavigator({
     Friends: {
@@ -140,6 +141,12 @@ export const Root = StackNavigator({
         screen: Settings,
         navigationOptions: {
             title: 'Settings'
+        }
+    },
+    AddGroup: {
+        screen: AddGroup,
+        navigationOptions: {
+            title: 'Create New Group'
         }
     }
 });

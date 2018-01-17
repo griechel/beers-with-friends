@@ -3,12 +3,17 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 export default class AddGroupButton extends Component {
+    handlePress(){
+        this.props.action();
+        this.props.navigation.navigate('AddGroup');
+    }
+    
     render(){
         return(
             <View style={styles.main}>
                 <Text style={styles.label}>Create New Group</Text>
                 <TouchableOpacity 
-                    onPress={this.props.addMessage}
+                    onPress={this.handlePress.bind(this)}
                     style={styles.circle}>
                     <Icon name='group' size={45} color='white' />
                 </TouchableOpacity>
