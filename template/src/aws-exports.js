@@ -23,6 +23,8 @@ const awsmobile = {
     'aws_project_region': 'us-east-1',
     'aws_resource_name_prefix': 'beerswithfriends-mobilehub-1162968537',
     'aws_sign_in_enabled': 'enable',
+    'aws_user_pools_id': 'us-east-1_YKouu62W7',
+    'aws_user_pools_web_client_id': '2omf58qubep8sac98kqdd28d4m',
 }
 
 export default awsmobile;
