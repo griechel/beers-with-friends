@@ -35,7 +35,7 @@ export default class EventList extends Component {
         return(
             <View 
                 style={{
-                    height:10,
+                    height:5,
                     width:100+'%',
                     backgroundColor:'rgba(256,256,256,0)',
                 }}
@@ -69,10 +69,13 @@ const styles = StyleSheet.create({
         backgroundColor:'rgb(230,230,230)'
     },
     sectionHeader: {
-        backgroundColor:'rgb(220,220,220)'
+        backgroundColor:'rgb(220,220,220)',
+        justifyContent:'center',
+        alignItems:'center'
     },
     sectionHeaderText: {
         fontSize:14,
-        fontWeight:'bold'
+        fontWeight:'bold',
+        color:'rgb(28,135,206)'
     }
 });

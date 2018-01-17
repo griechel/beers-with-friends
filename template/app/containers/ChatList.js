@@ -25,9 +25,9 @@ export default class ChatList extends Component {
         return(
             <View 
                 style={{
-                    height:1,
+                    height:5,
                     width:100+'%',
-                    backgroundColor:'black',
+                    backgroundColor:'rgba(256,256,256,0)',
                 }}
                 />
         );
@@ -51,5 +51,6 @@ const styles = StyleSheet.create({
     main: {
         width:100+'%',
         height:100+'%',
+        backgroundColor: 'rgb(230,230,230)'
     }
 });

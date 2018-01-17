@@ -21,6 +21,5 @@ const styles = StyleSheet.create({
     main: {
         width:100+'%',
         height:100+'%',
-        backgroundColor:'white'
     }
 });
