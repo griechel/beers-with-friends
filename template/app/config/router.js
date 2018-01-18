@@ -25,6 +25,16 @@ export const FriendsStack = StackNavigator({
             headerTitleStyle: { color:'white'},
             headerRight: <SettingsButton navigation={navigation}/>
         })
+    },
+    AddGroup: {
+        screen: AddGroup,
+        navigationOptions: {
+            title: 'Create New Group',
+            headerStyle: { backgroundColor:'rgb(28,135,206)'},
+            headerTitleStyle: { color:'white'},
+            headerTintColor:'white',
+            tabBarVisible: false
+        }
     }
 });
 
@@ -143,7 +153,7 @@ export const Root = StackNavigator({
             title: 'Settings'
         }
     },
-    AddGroup: {
+    /*AddGroup: {
         screen: AddGroup,
         navigationOptions: {
             title: 'Create New Group',
@@ -151,5 +161,5 @@ export const Root = StackNavigator({
             headerTitleStyle: { color:'white'},
             headerTintColor:'white'
         }
-    }
+    }*/
 });

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button, ScrollView } from 'react-native';
 import { SearchBar } from 'react-native-elements';
+import { NavigationActions } from 'react-navigation'
 
 import AddGroupList from '../containers/AddGroupList';
 
@@ -61,7 +62,7 @@ export default class AddGroup extends Component {
                         <Text style={styles.sendText}>{this.createList(this.state.recipients)}</Text>
                     </ScrollView>
                     <Button 
-                        onPress={()=> this.props.navigation.navigate('Friends')} 
+                        onPress={()=> this.props.navigation.dispatch(NavigationActions.back())} 
                         title='Done'
                         color='white' 
                         />
