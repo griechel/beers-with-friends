@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button, ScrollView } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 
 import AddGroupList from '../containers/AddGroupList';
 
@@ -45,14 +46,23 @@ export default class AddGroup extends Component {
     render() {
         return (
             <View style={styles.main}>
-                <AddGroupList onSelectUser={this.addUser}/>
+                <SearchBar 
+                    noIcon
+                    //lightTheme
+                    placeholder='Type Group Name Here'
+                    // onChangeText={(eventValue) => this.setState({ eventValue })}
+                    // value={this.state.eventValue}
+                />
+                <View style={{flex:1}}>
+                    <AddGroupList onSelectUser={this.addUser}/>
+                </View>
                 {this.showBanner() && <View style={styles.banner}>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scroll}>
                         <Text style={styles.sendText}>{this.createList(this.state.recipients)}</Text>
                     </ScrollView>
                     <Button 
                         onPress={()=> this.props.navigation.navigate('Friends')} 
-                        title='Send'
+                        title='Done'
                         color='white' 
                         />
                 </View>}

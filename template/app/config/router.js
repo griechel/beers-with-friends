@@ -146,7 +146,10 @@ export const Root = StackNavigator({
     AddGroup: {
         screen: AddGroup,
         navigationOptions: {
-            title: 'Create New Group'
+            title: 'Create New Group',
+            headerStyle: { backgroundColor:'rgb(28,135,206)'},
+            headerTitleStyle: { color:'white'},
+            headerTintColor:'white'
         }
     }
 });

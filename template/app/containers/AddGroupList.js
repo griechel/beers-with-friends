@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, SectionList, TouchableOpacity } from 'react-native';
+import { SearchBar } from 'react-native-elements';
 import InviteFriendItem from './InviteFriendItem';
 
 import { BestFriends, Friends, Groups } from '../config/data';
@@ -55,7 +56,7 @@ export default class AddGroupList extends Component {
 
 const styles = StyleSheet.create({
     main: {
-        height:100+'%',
+        //height:100+'%',
         width:100+'%',
         backgroundColor: 'rgb(230,230,230)'
     },
