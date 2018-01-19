@@ -22,14 +22,12 @@ export default class CreateEventTime extends Component {
             <View style={styles.main}>
                 <SearchBar 
                     noIcon
-                    round
                     lightTheme
                     value={this.state.eventName}
                     editable={false}
                     />
                 <SearchBar 
                     noIcon
-                    round
                     lightTheme
                     placeholder='When should we do this?'
                     onChangeText={(timeValue) => this.setState({ timeValue })}

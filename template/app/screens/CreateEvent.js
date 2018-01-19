@@ -25,7 +25,6 @@ export default class CreateEvent extends Component {
                 <View style={styles.main}>
                     <SearchBar 
                         noIcon
-                        round
                         lightTheme
                         placeholder={this.state.eventLabel}
                         onChangeText={(eventValue) => this.setState({ eventValue })}
