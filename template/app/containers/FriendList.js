@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, SectionList } from 'react-native';
 import FriendItem from './FriendItem';
+import ChatList from './ChatList';
 
 import { BestFriends, Friends, Groups } from '../config/data';
 
@@ -9,7 +10,7 @@ export default class FriendList extends Component {
     _renderEvent(item){
         return(
             <View>
-                <FriendItem name={item.name} title={item.title} picture={item.picture}/>
+                <FriendItem name={item.name} title={item.title} picture={item.picture} type={item.type}/>
             </View>
         );
     }

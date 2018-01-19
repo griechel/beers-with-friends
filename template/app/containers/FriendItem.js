@@ -4,10 +4,45 @@ import { Avatar } from 'react-native-elements';
 import Swipeout from 'react-native-swipeout';
 
 export default class FriendItem extends Component {
+    constructor(){
+        super();
+        this.state = {
+            swipeoutBtns: []
+        }
+    }
+    
+    componentDidMount() {
+        if (this.props.type=='group') {
+            this.setState({swipeoutBtns: [
+                {
+                    text:'Edit',
+                    backgroundColor:'green'
+                },
+                {
+                    text:'Delete',
+                    backgroundColor:'red'
+                }
+            ]})
+        } else if (this.props.type=='best') {
+            this.setState({swipeoutBtns: [
+                {
+                    text:'Remove',
+                    backgroundColor:'orange'
+                }
+            ]})
+        } else {
+            this.setState({swipeoutBtns: [
+                {
+                    text:'Delete',
+                    backgroundColor:'red'
+                }
+            ]})
+        }
+    }
 
     render(){
         return(
-            <Swipeout right={swipeoutBtns} backgroundColor='white'>
+            <Swipeout right={this.state.swipeoutBtns} backgroundColor='white'>
                 <View style={styles.main}>
                     <View style={styles.box1}>
                         <Avatar 
@@ -25,12 +60,12 @@ export default class FriendItem extends Component {
     }
 }
 
-var swipeoutBtns = [
+/*var swipeoutBtns = [
     {
         text:'Delete',
         backgroundColor:'red'
     }
-]
+]*/
 
 const styles = StyleSheet.create({
     main: {
