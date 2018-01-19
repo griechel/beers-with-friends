@@ -60,13 +60,6 @@ export default class FriendItem extends Component {
     }
 }
 
-/*var swipeoutBtns = [
-    {
-        text:'Delete',
-        backgroundColor:'red'
-    }
-]*/
-
 const styles = StyleSheet.create({
     main: {
       flexDirection:'row',

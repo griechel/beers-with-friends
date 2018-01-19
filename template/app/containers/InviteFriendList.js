@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, SectionList, TouchableOpacity } from 'react-native';
 import InviteFriendItem from './InviteFriendItem';
+import PublicSwitch from '../components/PublicSwitch';
 
 import { BestFriends, Friends, Groups } from '../config/data';
 
@@ -22,6 +23,14 @@ export default class InviteFriendList extends Component {
         );
     }
 
+    renderHeader = () => {
+        return(
+            <View>
+                <PublicSwitch />
+            </View>
+        )
+    }
+
     renderSeparator = () => {
         return(
             <View 
@@ -40,6 +49,7 @@ export default class InviteFriendList extends Component {
                 <SectionList 
                     renderItem={({item})=>this._renderEvent(item)}
                     renderSectionHeader={({section})=> this.renderSectionHeader(section)}
+                    ListHeaderComponent={this.renderHeader}
                     ItemSeparatorComponent= {this.renderSeparator}
                     sections={[
                         {data:Groups, title:'Groups'},
