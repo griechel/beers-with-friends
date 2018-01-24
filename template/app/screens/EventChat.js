@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { SearchBar } from 'react-native-elements';
-import {GiftedChat } from 'react-native-gifted-chat';
+import { GiftedChat } from 'react-native-gifted-chat';
 
 export default class EventChat extends Component {
     

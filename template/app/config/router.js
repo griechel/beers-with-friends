@@ -4,7 +4,6 @@ import { Icon } from 'react-native-elements';
 import SettingsButton from '../components/SettingsButton';
 import CancelButton from '../components/CancelButton';
 
-import ScreenOne from '../screens/screenOne';
 import Events from '../screens/Events';
 import Friends from '../screens/Friends';
 import Chat from '../screens/Chat';
@@ -150,16 +149,10 @@ export const Root = StackNavigator({
     Settings: {
         screen: Settings,
         navigationOptions: {
-            title: 'Settings'
-        }
-    },
-    /*AddGroup: {
-        screen: AddGroup,
-        navigationOptions: {
-            title: 'Create New Group',
+            title: 'Settings',
             headerStyle: { backgroundColor:'rgb(28,135,206)'},
             headerTitleStyle: { color:'white'},
             headerTintColor:'white'
         }
-    }*/
+    },
 });
