@@ -7,15 +7,49 @@ import { BestFriends, Friends, Groups } from '../config/data';
 
 export default class FriendList extends Component {
 
-    _renderEvent(item){
+    _renderGroups = ({item}) => {
         return(
             <View>
-                <FriendItem name={item.name} title={item.title} picture={item.picture} type={item.type}/>
+                <FriendItem 
+                    name={item.name} 
+                    title={item.title} 
+                    picture={item.picture} 
+                    type={item.type} 
+                    swipeoutBtns={groupBtns}
+                />
             </View>
         );
     }
 
-    renderSectionHeader(section){
+    _renderBestFriends = ({item}) => {
+        return(
+            <View>
+                <FriendItem 
+                    name={item.name} 
+                    title={item.title} 
+                    picture={item.picture} 
+                    type={item.type} 
+                    swipeoutBtns={bestFriendBtns}
+                />
+            </View>
+        );
+    }
+
+    _renderFriends = ({item}) => {
+        return(
+            <View>
+                <FriendItem 
+                    name={item.name} 
+                    title={item.title} 
+                    picture={item.picture} 
+                    type={item.type} 
+                    swipeoutBtns={friendBtns}
+                />
+            </View>
+        );
+    }
+
+    renderSectionHeader = ({section}) => {
         return(
             <View style={styles.sectionHeader}>
                 <Text style={styles.sectionHeaderText}>{section.title}</Text>
@@ -39,13 +73,12 @@ export default class FriendList extends Component {
         return(
             <View style={styles.main}>
                 <SectionList 
-                    renderItem={({item})=>this._renderEvent(item)}
-                    renderSectionHeader={({section})=> this.renderSectionHeader(section)}
+                    renderSectionHeader={this.renderSectionHeader}
                     ItemSeparatorComponent= {this.renderSeparator}
                     sections={[
-                        {data:Groups, title:'Groups'},
-                        {data:BestFriends, title:'My Main Crew'},
-                        {data:Friends, title:'I Guess I Like These People Too'}
+                        {data:Groups, renderItem: this._renderGroups, title:'Groups'},
+                        {data:BestFriends, renderItem: this._renderBestFriends, title:'My Main Crew'},
+                        {data:Friends, renderItem: this._renderFriends, title:'I Guess I Like These People Too'}
                     ]}
                     keyExtractor={(item, index) => index}
                     />
@@ -53,6 +86,31 @@ export default class FriendList extends Component {
         );
     }
 }
+
+const groupBtns = [
+    {
+        text:'Edit',
+        backgroundColor:'green'
+    },
+    {
+        text:'Delete',
+        backgroundColor:'red'
+    }
+]
+
+const bestFriendBtns = [
+    {
+        text:'Remove',
+        backgroundColor:'orange'
+    }
+]
+
+const friendBtns = [
+    {
+        text:'Delete',
+        backgroundColor:'red'
+    }
+]
 
 const styles = StyleSheet.create({
     main: {

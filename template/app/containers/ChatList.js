@@ -13,7 +13,7 @@ export default class ChatList extends Component {
             ]
         }
     }
-    _renderEvent(item){
+    _renderEvent = ({item}) => {
         return(
             <TouchableOpacity onPress={() => this.props.navigation.navigate('EventChat')}>
                 <ChatItem name={item.from} body={item.subject} time={item.time}/>
@@ -38,7 +38,7 @@ export default class ChatList extends Component {
             <View style={styles.main}>
                 <FlatList 
                     data= {this.state.chats}
-                    renderItem={({item})=>this._renderEvent(item)}
+                    renderItem={this._renderEvent}
                     ItemSeparatorComponent= {this.renderSeparator}
                     keyExtractor={(item, index) => index}
                     />

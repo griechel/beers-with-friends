@@ -18,7 +18,7 @@ export default class SuggestedEvents extends Component {
             ]
         }
     }
-    _renderEvent(item){
+    _renderEvent = ({item}) => {
         return(
             <TouchableOpacity onPress={() => this.props.onSelectEvent(item.name)}>
                 <SuggestedEventItem name={item.name} />
@@ -42,7 +42,7 @@ export default class SuggestedEvents extends Component {
         return (
             <View style={styles.main}>
             <SectionList 
-                renderItem={({item})=>this._renderEvent(item)}
+                renderItem={this._renderEvent}
                 renderSectionHeader={({section})=> <Text style={styles.sectionHeader}>{section.title}</Text>}
                 ItemSeparatorComponent= {this.renderSeparator}
                 sections={[

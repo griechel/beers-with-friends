@@ -15,7 +15,7 @@ export default class EventList extends Component {
             ]
         }
     }
-    renderEvent(item){
+    renderEvent = ({item}) => {
         return(
             <View>
                 <EventItem name={item.attendees} body={item.subject} time={item.time}/>
@@ -23,7 +23,7 @@ export default class EventList extends Component {
         );
     }
 
-    renderSectionHeader(section){
+    renderSectionHeader = ({section}) => {
         return(
             <View style={styles.sectionHeader}>
                 <Text style={styles.sectionHeaderText}>{section.title}</Text>
@@ -47,8 +47,8 @@ export default class EventList extends Component {
         return(
             <View style={styles.main}>
                 <SectionList 
-                    renderItem={({item})=>this.renderEvent(item)}
-                    renderSectionHeader={({section})=> this.renderSectionHeader(section)}
+                    renderItem={this.renderEvent}
+                    renderSectionHeader={this.renderSectionHeader}
                     ItemSeparatorComponent= {this.renderSeparator}
                     sections={[
                         {data:PrivateEvents, title:'Private'},

@@ -7,7 +7,7 @@ import { BestFriends, Friends, Groups } from '../config/data';
 
 export default class InviteFriendList extends Component {
 
-    _renderEvent(item){
+    _renderEvent = ({item}) => {
         return(
             <View>
                 <InviteFriendItem user={item} onSelectUser={this.props.onSelectUser}/>
@@ -15,7 +15,7 @@ export default class InviteFriendList extends Component {
         );
     }
 
-    renderSectionHeader(section){
+    renderSectionHeader = ({section}) => {
         return(
             <View style={styles.sectionHeader}>
                 <Text style={styles.sectionHeaderText}>{section.title}</Text>
@@ -47,8 +47,8 @@ export default class InviteFriendList extends Component {
         return(
             <View style={styles.main}>
                 <SectionList 
-                    renderItem={({item})=>this._renderEvent(item)}
-                    renderSectionHeader={({section})=> this.renderSectionHeader(section)}
+                    renderItem={this._renderEvent}
+                    renderSectionHeader={this.renderSectionHeader}
                     ListHeaderComponent={this.renderHeader}
                     ItemSeparatorComponent= {this.renderSeparator}
                     sections={[

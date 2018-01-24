@@ -15,7 +15,7 @@ export default class TimeList extends Component {
             ]
         }
     }
-    _renderEvent(item){
+    _renderEvent = ({item}) => {
         return(
             <TouchableOpacity onPress={() => this.props.onSelectTime(item.time)}>
                 <TimeItem time={item.time}/>
@@ -40,7 +40,7 @@ export default class TimeList extends Component {
             <View>
                 <FlatList 
                     data= {this.state.times}
-                    renderItem={({item})=>this._renderEvent(item)}
+                    renderItem={this._renderEvent}
                     ItemSeparatorComponent= {this.renderSeparator}
                     keyExtractor={(item, index) => index}
                     />
