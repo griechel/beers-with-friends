@@ -1,5 +1,5 @@
 import React from 'react';
-import { TabNavigator, StackNavigator, Button, Text } from 'react-navigation';
+import { TabNavigator, StackNavigator, DrawerNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import SettingsButton from '../components/SettingsButton';
 import CancelButton from '../components/CancelButton';
@@ -50,6 +50,21 @@ export const EventsStack = StackNavigator({
     }
 });
 
+export const EventChatStack = DrawerNavigator({
+    EventChat: {
+        screen: EventChat,
+        navigationOptions: {
+            title: 'Message',
+            headerStyle: { backgroundColor:'rgb(28,135,206)'},
+            headerTitleStyle: { color:'white'},
+            headerTintColor:'white',
+            gesturesEnabled:false
+        }
+    }
+    }, {
+        drawerPosition:'right',
+});
+
 export const ChatStack = StackNavigator({
     Chat: {
         screen: Chat,
@@ -59,6 +74,15 @@ export const ChatStack = StackNavigator({
             headerTitleStyle: { color:'white'},
             headerRight: <SettingsButton navigation={navigation}/>
         })
+    },
+    EventChatStack: {
+        screen: EventChatStack,
+        navigationOptions: {
+            // title: 'Override',
+            headerStyle: { backgroundColor:'rgb(28,135,206)'},
+            headerTitleStyle: { color:'white'},
+            headerTintColor:'white',
+        }
     }
 });
 
@@ -123,15 +147,6 @@ export const Root = StackNavigator({
         screen: Tabs,
         navigationOptions: {
             header: null
-        }
-    },
-    EventChat: {
-        screen: EventChat,
-        navigationOptions: {
-            title: 'Message',
-            headerStyle: { backgroundColor:'rgb(28,135,206)'},
-            headerTitleStyle: { color:'white'},
-            headerTintColor:'white'
         }
     },
     CreateEventStack: {

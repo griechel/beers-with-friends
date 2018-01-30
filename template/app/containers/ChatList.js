@@ -15,7 +15,7 @@ export default class ChatList extends Component {
     }
     _renderEvent = ({item}) => {
         return(
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('EventChat')}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('EventChatStack')}>
                 <ChatItem name={item.from} body={item.subject} time={item.time}/>
             </TouchableOpacity>
         );
