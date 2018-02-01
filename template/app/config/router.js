@@ -14,6 +14,7 @@ import CreateEventInvites from '../screens/CreateEventInvites';
 import AddFriend from '../screens/AddFriend';
 import Settings from '../screens/Settings';
 import AddGroup from '../screens/AddGroup';
+import Login from '../screens/Login';
 
 export const FriendsStack = StackNavigator({
     Friends: {
@@ -143,6 +144,12 @@ export const Tabs = TabNavigator({
 });
 
 export const Root = StackNavigator({
+    Login : {
+        screen: Login,
+        navigationOptions: {
+            
+        }
+    },
     Tabs: {
         screen: Tabs,
         navigationOptions: {
