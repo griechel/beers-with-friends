@@ -3,44 +3,39 @@ import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableOpacity
 } from 'react-native';
-const FBSDK = require('react-native-fbsdk');
-const {
-  LoginButton,
-  AccessToken
-} = FBSDK;
-
-const FACEBOOK_PERMISSIONS = ['public_profile', 'email', 'user_friends']
+import FBSDK, { LoginManager, AccessToken } from 'react-native-fbsdk';
 
 export default class Login extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <LoginButton
-          readPermissions={['public_profile', 'email', 'user_friends']}
-          onLoginFinished={
-            (error, result) => {
-              if (error) {
-                alert("Login failed with error ");
-              } else if (result.isCancelled) {
-                alert("Login was cancelled");
+  
+     _fbAuth() {
+        LoginManager.logInWithReadPermissions(['public_profile', 'user_friends', 'email']).then(
+           function(result) {
+              if (result.isCancelled) {
+                 alert('Login cancelled');
               } else {
-                AccessToken.getCurrentAccessToken().then(
-                  (data) => {
-                    alert(data.accessToken.toString())
-                  }
-                )
-                //alert("Login was successful")
-                //this.props.navigation.navigate('FriendsStack')
+                 alert('Login success with permissions: '
+                 +result.grantedPermissions.toString());
               }
-            }
-          }
-          onLogoutFinished={() => alert("User logged out")}/>
-      </View>
-    );
+           },
+           function(error) {
+              alert('Login fail with error: ' + error);
+           }
+        );
+     }
+  
+     render() {
+        return (
+           <View style={styles.container}>
+              <TouchableOpacity onPress={this._fbAuth}>
+                 <Text>Login with Facebook</Text>
+              </TouchableOpacity>
+           </View>
+        );
+     }
   }
-}
 
 const styles = StyleSheet.create({
   container: {
