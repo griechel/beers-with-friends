@@ -4,57 +4,138 @@ import {
   StyleSheet,
   Text,
   View,
+  AsyncStorage,
+  ActivityIndicator,
   TouchableOpacity
 } from 'react-native';
 import FBSDK, { LoginManager, AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
+import { firebaseRef } from '../config/firebase';
 import firebase from 'firebase';
-
-var config = {
-  apiKey: 'AIzaSyD5RIkOJa4YFP4nF-5fNEW-g_1UV8ZzuvM',
-  authDomain: 'beerswithfriends-7d04a.firebaseapp.com/',
-  databaseURL: 'https://beerswithfriends-7d04a.firebaseio.com/'
-}
-
-const firebaseRef = firebase.initializeApp(config)
 
 export default class Login extends Component {
 
   constructor(){
     super();
     this.state = {
-        loggedIn: false,
+      showSpinner: true,
+      counter: 1,
+      //  loggedIn: false,
     }
+  }
+
+  componentDidMount() {
+    this.fireBaseListener = firebase.auth().onAuthStateChanged(auth => {
+      if (auth) {
+        this.firebaseRef = firebase.database().ref('users')
+        this.firebaseRef.child(auth.uid).on('value', snap => {
+          const user = snap.val()
+          if (user != null) {
+            this.firebaseRef.child(auth.uid).off('value')
+            this.setState({ showSpinner: false })
+            this.props.navigation.navigate('Friends');
+          }
+        })
+      } else {
+        this.setState({ showSpinner: false })
+      }
+    })
   }
   
   _fbAuth() {
-    let _this = this;
-
-    LoginManager.logInWithReadPermissions(['public_profile', 'user_friends', 'email']).then(
-      function(result) {
-        if (result.isCancelled) {
-          alert('Login cancelled');
-        } else {
-          AccessToken.getCurrentAccessToken().then((accessTokenData) => {
-            alert(accessTokenData.accessToken.toString())
-            const credential = firebase.auth.FacebookAuthProvider.credential(accessTokenData.accessToken)
-            firebase.auth().signInWithCredential(credential).then((result) => {
-              // Promise was successful
-              _this.props.navigation.navigate('Friends');
-              _this.setState({loggedIn: true})
-            }, (error) => {
-              // Promise was rejected
-              console.log(error)
-            })
-          }, (error) => {
-            console.log('Some error occured' + error)
-          })
-        }
-      },
-      function(error) {
+    this.setState({ showSpinner: true })
+    LoginManager.logInWithReadPermissions(['public_profile', 'email', 'user_friends'])
+      .then((result) => this._handleCallBack(result),
+      function (error) {
         alert('Login fail with error: ' + error);
       }
-    );
+      )
   }
+  _handleCallBack(result) {
+    let _this = this
+    if (result.isCancelled) {
+      alert('Login cancelled');
+    } else {
+      AccessToken.getCurrentAccessToken().then(
+        (data) => {
+          const token = data.accessToken
+          fetch('https://graph.facebook.com/v2.8/me?fields=id,first_name,last_name&access_token=' + token)
+            .then((response) => response.json())
+            .then((json) => {
+              const imageSize = 120
+              const facebookID = json.id
+              const fbImage = `https://graph.facebook.com/${facebookID}/picture?height=${imageSize}`
+              this.authenticate(data.accessToken)
+                .then(function (result) {
+                  const { uid } = result
+                  _this.createUser(uid, json, token, fbImage)
+                })
+
+
+            })
+            .catch(function (err) {
+              console.log(err);
+            });
+        }
+      )
+
+    }
+  }
+
+  authenticate = (token) => {
+    const provider = firebase.auth.FacebookAuthProvider
+    const credential = provider.credential(token)
+    let ret = firebase.auth().signInWithCredential(credential)
+    return ret;
+  }
+
+  createUser = (uid, userData, token, dp) => {
+    const defaults = {
+      uid,
+      token,
+      dp
+    }
+    firebase.database().ref('users').child(uid).update({ ...userData, ...defaults })
+      .then((user) => {
+        firebase.database().ref('users').child(uid).once('value')
+          .then(async (snapshot) => {
+          try {
+            await AsyncStorage.setItem('@MySuperStore:key', snapshot.val().uid);
+          } catch (error) {
+            // Error saving data
+          }
+          alert(snapshot.val().uid)
+        })
+      })
+
+  }
+
+    // let _this = this;  ///previous code was almost perfect
+    // LoginManager.logInWithReadPermissions(['public_profile', 'user_friends', 'email']).then(
+    //   function(result) {
+    //     if (result.isCancelled) {
+    //       alert('Login cancelled');
+    //     } else {
+    //       AccessToken.getCurrentAccessToken().then((accessTokenData) => {
+    //         alert(accessTokenData.accessToken.toString())
+    //         const credential = firebase.auth.FacebookAuthProvider.credential(accessTokenData.accessToken)
+    //         firebase.auth().signInWithCredential(credential).then((result) => {
+    //           // Promise was successful
+    //           _this.props.navigation.navigate('Friends');
+    //           _this.setState({loggedIn: true})
+    //         }, (error) => {
+    //           // Promise was rejected
+    //           console.log(error)
+    //         })
+    //       }, (error) => {
+    //         console.log('Some error occured' + error)
+    //       })
+    //     }
+    //   },
+    //   function(error) {
+    //     alert('Login fail with error: ' + error);
+    //   }
+    // );
+  
 
   loginText() {
     return(
@@ -62,32 +143,40 @@ export default class Login extends Component {
     )
   }
 
-  testRequestGraphAPI(){    
-    const infoRequest = new GraphRequest(
-      '/me',
-      {
-        parameters: {
-          fields: {
-            string: 'last_name' // what you want to get
-          }
-        }
-      },
-      this._responseInfoCallback // make sure you define _responseInfoCallback in same class
-    );
-    new GraphRequestManager().addRequest(infoRequest).start();
+
+  // async getKey(){
+  //   return await AsyncStorage.getItem('@MySuperStore:key');
+  // }
+
+
+  async testRequestGraphAPI(){   
+    var myKey = ''
+      this.setState({ showSpinner: true}) 
+    try {
+      myKey = await AsyncStorage.getItem('@MySuperStore:key');
+      if (myKey !== null) {
+        alert(myKey)
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+    firebase.database().ref('users/' + myKey ).orderByChild('createdAt').limitToLast(this.state.counter).on('value',
+     (snapshot) => {
+     if (snapshot.val()) {
+       alert("Data Received From Firebase " + JSON.stringify(snapshot.val()))
+     }
+     else {
+       alert("error occured ")
+     }
+     this.setState({ showSpinner: false })
+   })
+
   }
 
-  _responseInfoCallback(error, result) {
-    if (error) {
-      alert('Error fetching data: ' + error.toString());
-    } else {
-      alert('Success fetching data: ' + result.last_name);
-    } 
-  }
-
-  render() {
+  render() {  
     return (
-      <View style={styles.container}>
+ this.state.showSpinner ? <View style={styles.container}><ActivityIndicator animating={this.state.showSpinner} /></View> :
+       <View style={styles.container}>
         <TouchableOpacity onPress={() => this._fbAuth()}>
           <Text>Login with Facebook</Text>
         </TouchableOpacity>
