@@ -19,7 +19,6 @@ export default class Login extends Component {
     this.state = {
       showSpinner: true,
       counter: 1,
-      //  loggedIn: false,
     }
   }
 
@@ -109,34 +108,6 @@ export default class Login extends Component {
 
   }
 
-    // let _this = this;  ///previous code was almost perfect
-    // LoginManager.logInWithReadPermissions(['public_profile', 'user_friends', 'email']).then(
-    //   function(result) {
-    //     if (result.isCancelled) {
-    //       alert('Login cancelled');
-    //     } else {
-    //       AccessToken.getCurrentAccessToken().then((accessTokenData) => {
-    //         alert(accessTokenData.accessToken.toString())
-    //         const credential = firebase.auth.FacebookAuthProvider.credential(accessTokenData.accessToken)
-    //         firebase.auth().signInWithCredential(credential).then((result) => {
-    //           // Promise was successful
-    //           _this.props.navigation.navigate('Friends');
-    //           _this.setState({loggedIn: true})
-    //         }, (error) => {
-    //           // Promise was rejected
-    //           console.log(error)
-    //         })
-    //       }, (error) => {
-    //         console.log('Some error occured' + error)
-    //       })
-    //     }
-    //   },
-    //   function(error) {
-    //     alert('Login fail with error: ' + error);
-    //   }
-    // );
-  
-
   loginText() {
     return(
       <Text>Logged in</Text>
@@ -175,12 +146,11 @@ export default class Login extends Component {
 
   render() {  
     return (
- this.state.showSpinner ? <View style={styles.container}><ActivityIndicator animating={this.state.showSpinner} /></View> :
-       <View style={styles.container}>
+      this.state.showSpinner ? <View style={styles.container}><ActivityIndicator animating={this.state.showSpinner} /></View> :
+      <View style={styles.container}>
         <TouchableOpacity onPress={() => this._fbAuth()}>
           <Text>Login with Facebook</Text>
         </TouchableOpacity>
-        {this.state.loggedIn && this.loginText()}
         <TouchableOpacity onPress={() => this.testRequestGraphAPI()}>
           <Text>Get Name</Text>
         </TouchableOpacity>

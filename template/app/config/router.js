@@ -59,7 +59,8 @@ export const EventChatStack = DrawerNavigator({
             headerStyle: { backgroundColor:'rgb(28,135,206)'},
             headerTitleStyle: { color:'white'},
             headerTintColor:'white',
-            gesturesEnabled:false
+            gesturesEnabled:false,
+            tabBarVisible:false
         }
     }
     }, {

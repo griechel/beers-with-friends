@@ -1,22 +1,49 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import ChatItem from './ChatItem';
+import firebase from 'firebase';
 
 export default class ChatList extends Component {
+
+    conversationsRef = firebase.database().ref('conversations');
+
     constructor(){
         super();
         this.state = {
-            chats: [
-                {id:1, from:'Garren', subject:'Rose n Crown?', time:'Today'},
-                {id:2, from:'James', subject:'Trivia', time:'Tomorrow'},
-                {id:3, from:'Garren', subject:'Old la Honda', time:'Next Week'}
-            ]
+            chats: []
         }
     }
+
+    componentDidMount() {
+        this.loadConversations();
+    }
+      
+    // retrieve the messages from the Backend
+    loadConversations = () => {
+        this.conversationsRef.once('value', (snap) => {
+            var chatArray =[];
+            this.getItems(snap, chatArray);
+            this.setState({chats: chatArray});
+            console.log(snap.val());
+            console.log(this.state.chats)
+        });
+    }
+
+    getItems = (snap, items) => {
+        snap.forEach((child) => {
+            items.push({
+                id: child.key,
+                title: child.val().title,
+                lastMessage: child.val().lastMessage,
+                date: child.val().date
+            });
+        });
+    }
+
     _renderEvent = ({item}) => {
         return(
             <TouchableOpacity onPress={() => this.props.navigation.navigate('EventChatStack')}>
-                <ChatItem name={item.from} body={item.subject} time={item.time}/>
+                <ChatItem id={item.id} title={item.title} lastMessage={item.lastMessage} date={item.date}/>
             </TouchableOpacity>
         );
     }

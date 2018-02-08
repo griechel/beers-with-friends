@@ -17,10 +17,10 @@ export default class ChatItem extends Component {
                 </View>
                 <View style={styles.box2}>
                     <View style={styles.topLine}>
-                        <Text style={styles.from}>{this.props.body}</Text>
-                        <Text style={styles.time}>{this.props.time}</Text>
+                        <Text style={styles.from}>{this.props.title}</Text>
+                        <Text style={styles.time}>{this.props.date}</Text>
                     </View>
-                    <Text style={styles.body}>{this.props.name}: blah blah blah</Text>
+                    <Text style={styles.body}>{this.props.lastMessage}</Text>
                 </View>
             </View>
         );
