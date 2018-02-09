@@ -2,10 +2,66 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, SectionList } from 'react-native';
 import FriendItem from './FriendItem';
 import ChatList from './ChatList';
+import firebase from 'firebase';
 
 import { BestFriends, Friends, Groups } from '../config/data';
 
 export default class FriendList extends Component {
+
+    groupsRef = firebase.database().ref('groups/NS1ukEbhQPaZzJLilsCL24Whfv23');
+    friendsRef = firebase.database().ref('friends/NS1ukEbhQPaZzJLilsCL24Whfv23');
+    
+    constructor(){
+        super();
+        this.state = {
+            friends: [],
+            bestFriends: [],
+            groups: []
+        }
+    }
+
+    componentDidMount() {
+        this.loadGroups();
+        this.loadBestFriends();
+        this.loadFriends();
+    }
+    
+    // retrieve groups from the Backend
+    loadGroups = () => {
+        this.groupsRef.once('value', (snap) => {
+            var tempArray =[];
+            this.getItems(snap, tempArray);
+            this.setState({groups: tempArray});
+        });
+    }
+
+    // retrieve best friends from the Backend
+    loadBestFriends = () => {
+        this.friendsRef.orderByChild('best').equalTo(true).once('value', (snap) => {
+            var tempArray =[];
+            this.getItems(snap, tempArray);
+            this.setState({bestFriends: tempArray});
+        });
+    }
+
+    // retrieve friends from the Backend
+    loadFriends = () => {
+        this.friendsRef.orderByChild('best').equalTo(false).once('value', (snap) => {
+            var tempArray =[];
+            this.getItems(snap, tempArray);
+            this.setState({friends: tempArray});
+        });
+    }
+
+    getItems = (snap, items) => {
+        snap.forEach((child) => {
+            items.push({
+                id: child.key,
+                name: child.val().name,
+                picture: child.val().dp,
+            });
+        });
+    }
 
     _renderGroups = ({item}) => {
         return(
@@ -76,9 +132,9 @@ export default class FriendList extends Component {
                     renderSectionHeader={this.renderSectionHeader}
                     ItemSeparatorComponent= {this.renderSeparator}
                     sections={[
-                        {data:Groups, renderItem: this._renderGroups, title:'Groups'},
-                        {data:BestFriends, renderItem: this._renderBestFriends, title:'My Main Crew'},
-                        {data:Friends, renderItem: this._renderFriends, title:'I Guess I Like These People Too'}
+                        {data:this.state.groups, renderItem: this._renderGroups, title:'Groups'},
+                        {data:this.state.bestFriends, renderItem: this._renderBestFriends, title:'My Main Crew'},
+                        {data:this.state.friends, renderItem: this._renderFriends, title:'I Guess I Like These People Too'}
                     ]}
                     keyExtractor={(item, index) => index}
                     />

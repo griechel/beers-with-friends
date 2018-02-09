@@ -24,8 +24,6 @@ export default class ChatList extends Component {
             var chatArray =[];
             this.getItems(snap, chatArray);
             this.setState({chats: chatArray});
-            console.log(snap.val());
-            console.log(this.state.chats)
         });
     }
 
