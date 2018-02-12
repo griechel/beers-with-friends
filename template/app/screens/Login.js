@@ -31,7 +31,7 @@ export default class Login extends Component {
           if (user != null) {
             this.firebaseRef.child(auth.uid).off('value')
             this.setState({ showSpinner: false })
-            this.props.navigation.navigate('Friends');
+            this.props.navigation.navigate('Tabs');
           }
         })
       } else {
@@ -98,7 +98,7 @@ export default class Login extends Component {
         firebase.database().ref('users').child(uid).once('value')
           .then(async (snapshot) => {
           try {
-            await AsyncStorage.setItem('@MySuperStore:key', snapshot.val().uid);
+            await AsyncStorage.setItem('myUID', snapshot.val().uid);
           } catch (error) {
             // Error saving data
           }
@@ -116,7 +116,7 @@ export default class Login extends Component {
 
 
   // async getKey(){
-  //   return await AsyncStorage.getItem('@MySuperStore:key');
+  //   return await AsyncStorage.getItem('myUID');
   // }
 
 
@@ -124,7 +124,7 @@ export default class Login extends Component {
     var myKey = ''
       this.setState({ showSpinner: true}) 
     try {
-      myKey = await AsyncStorage.getItem('@MySuperStore:key');
+      myKey = await AsyncStorage.getItem('myUID');
       if (myKey !== null) {
         alert(myKey)
       }

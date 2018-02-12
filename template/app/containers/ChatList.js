@@ -17,7 +17,7 @@ export default class ChatList extends Component {
     componentDidMount() {
         this.loadConversations();
     }
-      
+
     // retrieve the messages from the Backend
     loadConversations = () => {
         this.conversationsRef.once('value', (snap) => {

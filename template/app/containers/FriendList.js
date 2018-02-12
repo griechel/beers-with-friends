@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, SectionList } from 'react-native';
+import { View, Text, StyleSheet, SectionList, AsyncStorage } from 'react-native';
 import FriendItem from './FriendItem';
 import ChatList from './ChatList';
 import firebase from 'firebase';
@@ -7,9 +7,6 @@ import firebase from 'firebase';
 import { BestFriends, Friends, Groups } from '../config/data';
 
 export default class FriendList extends Component {
-
-    groupsRef = firebase.database().ref('groups/NS1ukEbhQPaZzJLilsCL24Whfv23');
-    friendsRef = firebase.database().ref('friends/NS1ukEbhQPaZzJLilsCL24Whfv23');
     
     constructor(){
         super();
@@ -21,14 +18,27 @@ export default class FriendList extends Component {
     }
 
     componentDidMount() {
-        this.loadGroups();
-        this.loadBestFriends();
-        this.loadFriends();
+        this.loadData();
     }
     
+    // get user id, define db references and get data
+    async loadData(){   
+        var myKey = ''
+        try {
+            myKey = await AsyncStorage.getItem('myUID');
+            groupsRef = firebase.database().ref('groups/' + myKey)
+            friendsRef = firebase.database().ref('friends/' + myKey)
+            this.loadGroups(groupsRef);
+            this.loadBestFriends(friendsRef);
+            this.loadFriends(friendsRef);
+        } catch (error) {
+          // Error retrieving data
+        }
+    }
+
     // retrieve groups from the Backend
-    loadGroups = () => {
-        this.groupsRef.once('value', (snap) => {
+    loadGroups = (groupsRef) => {
+        groupsRef.once('value', (snap) => {
             var tempArray =[];
             this.getItems(snap, tempArray);
             this.setState({groups: tempArray});
@@ -36,8 +46,8 @@ export default class FriendList extends Component {
     }
 
     // retrieve best friends from the Backend
-    loadBestFriends = () => {
-        this.friendsRef.orderByChild('best').equalTo(true).once('value', (snap) => {
+    loadBestFriends = (friendsRef) => {
+        friendsRef.orderByChild('best').equalTo(true).once('value', (snap) => {
             var tempArray =[];
             this.getItems(snap, tempArray);
             this.setState({bestFriends: tempArray});
@@ -45,8 +55,8 @@ export default class FriendList extends Component {
     }
 
     // retrieve friends from the Backend
-    loadFriends = () => {
-        this.friendsRef.orderByChild('best').equalTo(false).once('value', (snap) => {
+    loadFriends = (friendsRef) => {
+        friendsRef.orderByChild('best').equalTo(false).once('value', (snap) => {
             var tempArray =[];
             this.getItems(snap, tempArray);
             this.setState({friends: tempArray});
