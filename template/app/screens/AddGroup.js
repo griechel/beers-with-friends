@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Button, ScrollView, AsyncStorage } from 'react-native';
 import { SearchBar } from 'react-native-elements';
-import { NavigationActions } from 'react-navigation'
+import { NavigationActions } from 'react-navigation';
+import firebase from 'firebase';
 
 import AddGroupList from '../containers/AddGroupList';
 
@@ -10,27 +11,60 @@ export default class AddGroup extends Component {
     constructor(){
         super();
         this.state = {
-            recipients: [],
+            members: [],
+            groupName:'',
+            myUID:''
         }
     }
 
+    componentDidMount() {
+        this.loadData();
+    }
+    
+    // get user id, define db references and get data
+    async loadData(){   
+        var myKey = ''
+        try {
+            myKey = await AsyncStorage.getItem('myUID');
+            this.setState({myUID: myKey})
+        } catch (error) {
+          // Error retrieving data
+        }
+    }
+
+    createGroup = () => {
+        var newGroupRef = firebase.database().ref('groups/' + this.state.myUID).push();
+        var memberList = {};
+        for (var i=0; i<this.state.members.length; i++) {
+            memberList['members/' + this.state.members[i].id] = {
+                name: this.state.members[i].name,
+                picture: this.state.members[i].picture
+            }
+        };
+        memberList['name'] = this.state.groupName
+        newGroupRef.update(memberList);
+        console.log(newGroupRef)
+        console.log(this.state.members)
+        this.props.navigation.dispatch(NavigationActions.back())
+    }
+
     addUser = (user) => {
-        userList= this.state.recipients
+        userList= this.state.members
         if (userList.indexOf(user) == -1) {
             userList.push(user);
         } else {
             userList.splice(userList.indexOf(user), 1);
         }
-        this.setState({recipients: userList})
+        this.setState({members: userList})
     }
 
     createList(userArray) {
         userList=''
         for (var i=0; i<userArray.length; i++) {
             if (i==0) {
-                userList= userList + userArray[i]
+                userList= userList + userArray[i].name
             } else {
-                userList= userList + ', ' + userArray[i]
+                userList= userList + ', ' + userArray[i].name
             }
         }
         return userList;
@@ -38,7 +72,7 @@ export default class AddGroup extends Component {
 
     showBanner() {
         banner=false
-        if (this.state.recipients.length > 0) {
+        if (this.state.members.length > 0) {
             banner=true
         }
         return banner;
@@ -51,18 +85,17 @@ export default class AddGroup extends Component {
                     noIcon
                     //lightTheme
                     placeholder='Type Group Name Here'
-                    // onChangeText={(eventValue) => this.setState({ eventValue })}
-                    // value={this.state.eventValue}
+                    onChangeText={(name) => this.setState({ groupName: name })}
                 />
                 <View style={{flex:1}}>
                     <AddGroupList onSelectUser={this.addUser}/>
                 </View>
                 {this.showBanner() && <View style={styles.banner}>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scroll}>
-                        <Text style={styles.sendText}>{this.createList(this.state.recipients)}</Text>
+                        <Text style={styles.sendText}>{this.createList(this.state.members)}</Text>
                     </ScrollView>
                     <Button 
-                        onPress={()=> this.props.navigation.dispatch(NavigationActions.back())} 
+                        onPress={()=> this.createGroup()} 
                         title='Done'
                         color='white' 
                         />

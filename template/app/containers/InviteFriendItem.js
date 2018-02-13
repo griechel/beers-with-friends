@@ -12,7 +12,7 @@ export default class InviteFriendItem extends Component {
 
     selectRow(){
         this.setState({ filled: !this.state.filled});
-        this.props.onSelectUser(this.props.user.name);
+        this.props.onSelectUser(this.props.user);
     }
 
     render(){

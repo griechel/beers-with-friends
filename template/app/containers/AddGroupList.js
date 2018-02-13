@@ -1,11 +1,65 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, SectionList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SectionList, TouchableOpacity, AsyncStorage } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import InviteFriendItem from './InviteFriendItem';
+import firebase from 'firebase';
 
 import { BestFriends, Friends, Groups } from '../config/data';
 
 export default class AddGroupList extends Component {
+
+    constructor(){
+        super();
+        this.state = {
+            friends: [],
+            bestFriends: []
+        }
+    }
+    
+    componentDidMount() {
+        this.loadData();
+    }
+    
+    // get user id, define db references and get data
+    async loadData(){   
+        var myKey = ''
+        try {
+            myKey = await AsyncStorage.getItem('myUID');
+            friendsRef = firebase.database().ref('friends/' + myKey)
+            this.loadBestFriends(friendsRef);
+            this.loadFriends(friendsRef);
+        } catch (error) {
+          // Error retrieving data
+        }
+    }
+
+    // retrieve best friends from the Backend
+    loadBestFriends = (friendsRef) => {
+        friendsRef.orderByChild('best').equalTo(true).once('value', (snap) => {
+            var tempArray =[];
+            this.getItems(snap, tempArray);
+            this.setState({bestFriends: tempArray});
+        });
+    }
+
+    // retrieve friends from the Backend
+    loadFriends = (friendsRef) => {
+        friendsRef.orderByChild('best').equalTo(false).once('value', (snap) => {
+            var tempArray =[];
+            this.getItems(snap, tempArray);
+            this.setState({friends: tempArray});
+        });
+    }
+
+    getItems = (snap, items) => {
+        snap.forEach((child) => {
+            items.push({
+                id: child.key,
+                name: child.val().name,
+                picture: child.val().dp,
+            });
+        });
+    }
 
     _renderEvent = ({item}) => {
         return(
@@ -43,8 +97,8 @@ export default class AddGroupList extends Component {
                     renderSectionHeader={this.renderSectionHeader}
                     ItemSeparatorComponent= {this.renderSeparator}
                     sections={[
-                        {data:BestFriends, title:'My Main Crew'},
-                        {data:Friends, title:'I Guess I Like These People Too'}
+                        {data:this.state.bestFriends, title:'My Main Crew'},
+                        {data:this.state.friends, title:'I Guess I Like These People Too'}
                     ]}
                     keyExtractor={(item, index) => index}
                     contentContainerStyle={{paddingBottom:35}}
