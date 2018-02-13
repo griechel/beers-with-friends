@@ -1,34 +1,71 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Button, ScrollView, AsyncStorage } from 'react-native';
+import firebase from 'firebase';
 
 import InviteFriendList from '../containers/InviteFriendList';
 
 export default class CreateEventInvites extends Component {
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
-            recipients: [],
+            eventName:this.props.navigation.state.params.event,
+            eventTime:this.props.navigation.state.params.time,
+            members: [],
+            myUID:'',
+            public: true
         }
     }
 
+    componentDidMount() {
+        this.loadData();
+    }
+    
+    // get user id
+    async loadData(){   
+        var myKey = ''
+        try {
+            myKey = await AsyncStorage.getItem('myUID');
+            this.setState({myUID: myKey})
+        } catch (error) {
+          // Error retrieving data
+        }
+    }
+
+    createEvent = () => {
+        var newGroupRef = firebase.database().ref('events/').push();
+        var memberList = {};
+        for (var i=0; i<this.state.members.length; i++) {
+            memberList['members/' + this.state.members[i].id] = {
+                name: this.state.members[i].name,
+                //picture: this.state.members[i].picture
+            }
+        };
+        memberList['members/' + this.state.myUID] = true;
+        memberList['name'] = this.state.eventName;
+        memberList['time'] = this.state.eventTime;
+        memberList['public'] = this.state.public;
+        newGroupRef.update(memberList);
+        this.props.navigation.navigate('Events')
+    }
+
     addUser = (user) => {
-        userList= this.state.recipients
+        userList= this.state.members
         if (userList.indexOf(user) == -1) {
             userList.push(user);
         } else {
             userList.splice(userList.indexOf(user), 1);
         }
-        this.setState({recipients: userList})
+        this.setState({members: userList})
     }
 
     createList(userArray) {
         userList=''
         for (var i=0; i<userArray.length; i++) {
             if (i==0) {
-                userList= userList + userArray[i]
+                userList= userList + userArray[i].name
             } else {
-                userList= userList + ', ' + userArray[i]
+                userList= userList + ', ' + userArray[i].name
             }
         }
         return userList;
@@ -36,22 +73,27 @@ export default class CreateEventInvites extends Component {
 
     showBanner() {
         banner=false
-        if (this.state.recipients.length > 0) {
+        if (this.state.members.length > 0) {
             banner=true
         }
         return banner;
     }
 
+    togglePublic = () => {
+        this.setState({public: !this.state.public});
+        console.log(this.state.public)
+    }
+
     render() {
         return (
             <View style={styles.main}>
-                <InviteFriendList onSelectUser={this.addUser}/>
+                <InviteFriendList onSelectUser={this.addUser} public={this.togglePublic}/>
                 {this.showBanner() && <View style={styles.banner}>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scroll}>
-                        <Text style={styles.sendText}>{this.createList(this.state.recipients)}</Text>
+                        <Text style={styles.sendText}>{this.createList(this.state.members)}</Text>
                     </ScrollView>
                     <Button 
-                        onPress={()=> this.props.navigation.navigate('Events')} 
+                        onPress={()=> this.createEvent()} 
                         title='Send'
                         color='white' 
                         />

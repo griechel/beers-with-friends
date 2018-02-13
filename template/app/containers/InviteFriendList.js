@@ -1,11 +1,91 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, SectionList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SectionList, TouchableOpacity, AsyncStorage } from 'react-native';
 import InviteFriendItem from './InviteFriendItem';
 import PublicSwitch from '../components/PublicSwitch';
+import firebase from 'firebase';
 
 import { BestFriends, Friends, Groups } from '../config/data';
 
 export default class InviteFriendList extends Component {
+
+    constructor(){
+        super();
+        this.state = {
+            friends: [],
+            bestFriends: [],
+            groups: []
+        }
+    }
+
+    componentDidMount() {
+        this.loadData();
+    }
+    
+    // get user id, define db references and get data
+    async loadData(){   
+        var myKey = ''
+        try {
+            myKey = await AsyncStorage.getItem('myUID');
+            groupsRef = firebase.database().ref('groups/' + myKey)
+            friendsRef = firebase.database().ref('friends/' + myKey)
+            this.loadGroups(groupsRef);
+            this.loadBestFriends(friendsRef);
+            this.loadFriends(friendsRef);
+        } catch (error) {
+          // Error retrieving data
+        }
+    }
+
+    // retrieve groups from the Backend
+    loadGroups = (groupsRef) => {
+        groupsRef.once('value', (snap) => {
+            var tempArray =[];
+            this.getItems(snap, tempArray);
+            this.setState({groups: tempArray});
+        });
+    }
+
+    // retrieve best friends from the Backend
+    loadBestFriends = (friendsRef) => {
+        friendsRef.orderByChild('best').equalTo(true).once('value', (snap) => {
+            var tempArray =[];
+            this.getItems(snap, tempArray);
+            this.setState({bestFriends: tempArray});
+        });
+    }
+
+    // retrieve friends from the Backend
+    loadFriends = (friendsRef) => {
+        friendsRef.orderByChild('best').equalTo(false).once('value', (snap) => {
+            var tempArray =[];
+            this.getItems(snap, tempArray);
+            this.setState({friends: tempArray});
+        });
+    }
+
+    getItems = (snap, items) => {
+        snap.forEach((child) => {
+            items.push({
+                id: child.key,
+                name: child.val().name,
+                picture: child.val().dp,
+            });
+        });
+    }
+
+    _renderGroups = ({item}) => {
+        return(
+            <View>
+                <FriendItem 
+                    name={item.name} 
+                    title={item.title} 
+                    picture={item.picture} 
+                    type={item.type} 
+                    swipeoutBtns={groupBtns}
+                />
+            </View>
+        );
+    }
 
     _renderEvent = ({item}) => {
         return(
@@ -26,7 +106,7 @@ export default class InviteFriendList extends Component {
     renderHeader = () => {
         return(
             <View>
-                <PublicSwitch />
+                <PublicSwitch public={this.props.public}/>
             </View>
         )
     }
@@ -52,9 +132,9 @@ export default class InviteFriendList extends Component {
                     ListHeaderComponent={this.renderHeader}
                     ItemSeparatorComponent= {this.renderSeparator}
                     sections={[
-                        {data:Groups, title:'Groups'},
-                        {data:BestFriends, title:'My Main Crew'},
-                        {data:Friends, title:'I Guess I Like These People Too'}
+                        {data:this.state.groups, title:'Groups'},
+                        {data:this.state.bestFriends, title:'My Main Crew'},
+                        {data:this.state.friends, title:'I Guess I Like These People Too'}
                     ]}
                     keyExtractor={(item, index) => index}
                     contentContainerStyle={{paddingBottom:35}}

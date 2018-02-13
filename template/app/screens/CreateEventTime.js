@@ -36,7 +36,7 @@ export default class CreateEventTime extends Component {
                 <TimeList onSelectTime={this.inputTime}/>
                 {this.state.timeValue!='' && <View style={styles.button}>
                     <Button 
-                        onPress={()=> this.props.navigation.navigate('CreateEventInvites')} 
+                        onPress={()=> this.props.navigation.navigate('CreateEventInvites',{event:this.state.eventName, time:this.state.timeValue})} 
                         title='Next'
                         color='white' 
                         />

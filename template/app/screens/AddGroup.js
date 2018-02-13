@@ -21,7 +21,7 @@ export default class AddGroup extends Component {
         this.loadData();
     }
     
-    // get user id, define db references and get data
+    // get user id
     async loadData(){   
         var myKey = ''
         try {
@@ -43,8 +43,6 @@ export default class AddGroup extends Component {
         };
         memberList['name'] = this.state.groupName
         newGroupRef.update(memberList);
-        console.log(newGroupRef)
-        console.log(this.state.members)
         this.props.navigation.dispatch(NavigationActions.back())
     }
 

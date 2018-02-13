@@ -10,7 +10,6 @@ export default class CreateEvent extends Component {
     constructor (){
         super();
         this.state= {
-            views:'event',
             eventLabel:'What do you want to do?',
             eventValue:''
         }

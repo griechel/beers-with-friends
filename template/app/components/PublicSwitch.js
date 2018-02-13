@@ -11,6 +11,7 @@ export default class PublicSwitch extends Component {
     }
     
     handleSwitch() {
+        this.props.public();
         this.setState({toggled: !this.state.toggled});
         if (this.state.switchLabel=='Yes') {
             this.setState({switchLabel:'No'})
