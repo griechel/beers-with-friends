@@ -6,13 +6,12 @@ import firebase from 'firebase';
 
 export default class EventChat extends Component {
     
-    messagesRef = firebase.database().ref('messages');
+    messagesRef = firebase.database().ref('messages/' + this.props.navigation.state.params.eventID);
 
     constructor(props){
         super(props);
         this.state = {
-           messages: [],
-           eventID: this.props.navigation.state.params.eventID
+           messages: []
         }
     }
 
@@ -60,8 +59,11 @@ export default class EventChat extends Component {
             <GiftedChat
                 messages={this.state.messages}
                 onSend={(message) => this.sendMessage(message)}
+                loadEarlier={true}
+                placeholder={this.props.navigation.state.params.eventID}
                 user={{
                 _id: 1,
+                name: 'Cole'
                 }}
             />
         );
