@@ -27,7 +27,7 @@ export default class EventChat extends Component {
       
       // retrieve the messages from the Backend
       loadMessages(callback) {
-        //this.messagesRef.off();
+        this.messagesRef.off();
         const onReceive = (data) => {
           const message = data.val();
           callback({
