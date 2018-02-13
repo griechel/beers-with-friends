@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, AsyncStorage} from 'react-native';
 import ChatItem from './ChatItem';
 import firebase from 'firebase';
 
 export default class ChatList extends Component {
-
-    conversationsRef = firebase.database().ref('conversations');
 
     constructor(){
         super();
@@ -15,15 +13,27 @@ export default class ChatList extends Component {
     }
 
     componentDidMount() {
-        this.loadConversations();
+        this.loadData();
+    }
+    
+    // get user id, define db references and get data
+    async loadData(){   
+        var myKey = ''
+        try {
+            myKey = await AsyncStorage.getItem('myUID');
+            chatsRef = firebase.database().ref('chatList/' + myKey)
+            this.loadChats(chatsRef);
+        } catch (error) {
+          // Error retrieving data
+        }
     }
 
-    // retrieve the messages from the Backend
-    loadConversations = () => {
-        this.conversationsRef.once('value', (snap) => {
-            var chatArray =[];
-            this.getItems(snap, chatArray);
-            this.setState({chats: chatArray});
+    // retrieve groups from the Backend
+    loadChats = (chatsRef) => {
+        chatsRef.once('value', (snap) => {
+            var tempArray =[];
+            this.getItems(snap, tempArray);
+            this.setState({chats: tempArray});
         });
     }
 
@@ -31,8 +41,8 @@ export default class ChatList extends Component {
         snap.forEach((child) => {
             items.push({
                 id: child.key,
-                title: child.val().title,
-                lastMessage: child.val().lastMessage,
+                title: child.val().name,
+                lastMessage: child.val().lastSender + ': ' + child.val().lastMessage,
                 date: child.val().date
             });
         });
@@ -40,7 +50,7 @@ export default class ChatList extends Component {
 
     _renderEvent = ({item}) => {
         return(
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('EventChatStack')}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('EventChatStack',{eventID: item.id})}>
                 <ChatItem id={item.id} title={item.title} lastMessage={item.lastMessage} date={item.date}/>
             </TouchableOpacity>
         );

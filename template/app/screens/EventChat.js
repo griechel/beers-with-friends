@@ -8,10 +8,11 @@ export default class EventChat extends Component {
     
     messagesRef = firebase.database().ref('messages');
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
-           messages: []
+           messages: [],
+           eventID: this.props.navigation.state.params.eventID
         }
     }
 

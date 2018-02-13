@@ -33,19 +33,26 @@ export default class CreateEventInvites extends Component {
     }
 
     createEvent = () => {
-        var newGroupRef = firebase.database().ref('events/').push();
-        var memberList = {};
+        var newEventRef = firebase.database().ref('events/').push();
+        var updateList = {};
         for (var i=0; i<this.state.members.length; i++) {
-            memberList['members/' + this.state.members[i].id] = {
+            updateList['members/' + this.state.members[i].id] = {
                 name: this.state.members[i].name,
                 //picture: this.state.members[i].picture
             }
         };
-        memberList['members/' + this.state.myUID] = true;
-        memberList['name'] = this.state.eventName;
-        memberList['time'] = this.state.eventTime;
-        memberList['public'] = this.state.public;
-        newGroupRef.update(memberList);
+        updateList['members/' + this.state.myUID] = true;
+        updateList['name'] = this.state.eventName;
+        updateList['time'] = this.state.eventTime;
+        updateList['public'] = this.state.public;
+        newEventRef.update(updateList);
+        
+        var eventMetaRef = firebase.database().ref('chatList/' + this.state.myUID).child(newEventRef.key).update({
+            name: this.state.eventName,
+            date: this.state.eventTime,
+            lastSender: 'Me',
+            lastMessage: 'Lets do it!'
+        })
         this.props.navigation.navigate('Events')
     }
 
