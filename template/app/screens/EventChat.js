@@ -7,6 +7,7 @@ import firebase from 'firebase';
 export default class EventChat extends Component {
     
     messagesRef = firebase.database().ref('messages/' + this.props.navigation.state.params.eventID);
+    chatListRef = firebase.database().ref('chatList').orderByChild(this.props.navigation.state.params.eventID).equalTo(this.props.navigation.state.params.eventID)
 
     constructor(props){
         super(props);
@@ -60,7 +61,6 @@ export default class EventChat extends Component {
                 messages={this.state.messages}
                 onSend={(message) => this.sendMessage(message)}
                 loadEarlier={true}
-                placeholder={this.props.navigation.state.params.eventID}
                 user={{
                 _id: 1,
                 name: 'Cole'
