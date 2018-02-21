@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
-import { Tabs, Root } from './config/router';
+import { Provider } from 'react-redux';
+
+import store from './store';
+import { Root } from './config/router';
 
 class App extends Component {
   render() {
-    return <Root />;
+    return (
+      <Provider store={store}>
+        <Root />
+      </Provider>
+    );
   }
 }
 
