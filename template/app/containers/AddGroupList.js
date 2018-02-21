@@ -21,16 +21,11 @@ export default class AddGroupList extends Component {
     }
     
     // get user id, define db references and get data
-    async loadData(){   
-        var myKey = ''
-        try {
-            myKey = await AsyncStorage.getItem('myUID');
-            friendsRef = firebase.database().ref('friends/' + myKey)
-            this.loadBestFriends(friendsRef);
-            this.loadFriends(friendsRef);
-        } catch (error) {
-          // Error retrieving data
-        }
+    loadData(){   
+        var myKey = this.props.uid
+        friendsRef = firebase.database().ref('friends/' + myKey)
+        this.loadBestFriends(friendsRef);
+        this.loadFriends(friendsRef);
     }
 
     // retrieve best friends from the Backend

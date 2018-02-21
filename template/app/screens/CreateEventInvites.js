@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button, ScrollView, AsyncStorage } from 'react-native';
 import firebase from 'firebase';
 
+import { bindActionCreators } from 'redux';
+import * as userActions from '../actions/userActions';
+import { connect } from 'react-redux';
+
 import InviteFriendList from '../containers/InviteFriendList';
 
-export default class CreateEventInvites extends Component {
+class CreateEventInvites extends Component {
 
     constructor(props){
         super(props);
@@ -17,21 +21,6 @@ export default class CreateEventInvites extends Component {
         }
     }
 
-    componentDidMount() {
-        this.loadData();
-    }
-    
-    // get user id
-    async loadData(){   
-        var myKey = ''
-        try {
-            myKey = await AsyncStorage.getItem('myUID');
-            this.setState({myUID: myKey})
-        } catch (error) {
-          // Error retrieving data
-        }
-    }
-
     createEvent = () => {
         var newEventRef = firebase.database().ref('events/').push();
         var updateList = {};
@@ -41,13 +30,13 @@ export default class CreateEventInvites extends Component {
                 //picture: this.state.members[i].picture
             }
         };
-        updateList['members/' + this.state.myUID] = true;
+        updateList['members/' + this.props.user.uid] = true;
         updateList['name'] = this.state.eventName;
         updateList['time'] = this.state.eventTime;
         updateList['public'] = this.state.public;
         newEventRef.update(updateList);
         
-        var eventMetaRef = firebase.database().ref('chatList/' + this.state.myUID).child(newEventRef.key).update({
+        var eventMetaRef = firebase.database().ref('chatList/' + this.props.user.uid).child(newEventRef.key).update({
             name: this.state.eventName,
             date: this.state.eventTime,
             lastSender: 'Me',
@@ -94,7 +83,7 @@ export default class CreateEventInvites extends Component {
     render() {
         return (
             <View style={styles.main}>
-                <InviteFriendList onSelectUser={this.addUser} public={this.togglePublic}/>
+                <InviteFriendList onSelectUser={this.addUser} public={this.togglePublic} uid={this.props.user.uid}/>
                 {this.showBanner() && <View style={styles.banner}>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scroll}>
                         <Text style={styles.sendText}>{this.createList(this.state.members)}</Text>
@@ -109,6 +98,14 @@ export default class CreateEventInvites extends Component {
         );
     }
 }
+
+export default connect(store => ({
+    user: store.user
+  }),
+  (dispatch) => ({
+    actions: bindActionCreators(userActions, dispatch)
+  })
+  )(CreateEventInvites);
 
 const styles = StyleSheet.create({
     main: {

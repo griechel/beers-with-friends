@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
+
 import { bindActionCreators } from 'redux';
-import Counter from '../components/Counter';
 import * as counterActions from '../actions/counterActions';
 import { connect } from 'react-redux';
+
+import Counter from '../components/Counter';
 
 class Settings extends Component {
     
@@ -18,9 +20,9 @@ class Settings extends Component {
       }
 }
 
-export default connect(state => ({
-    counter: state.counter,
-    user: state.user
+export default connect(store => ({
+    counter: store.counter,
+    user: store.user
   }),
   (dispatch) => ({
     actions: bindActionCreators(counterActions, dispatch)

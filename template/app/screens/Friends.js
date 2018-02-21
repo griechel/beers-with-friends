@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, StatusBar, Modal, TouchableWithoutFeedback } from 'react-native';
+
+import { bindActionCreators } from 'redux';
+import * as userActions from '../actions/userActions';
+import { connect } from 'react-redux';
+
 import FriendList from '../containers/FriendList';
 import AddFriendButton from '../components/AddFriendButton';
-
 import AddFromContacts from '../components/AddFromContacts';
 import AddGroupButton from '../components/AddGroupButton';
 
-export default class Friends extends Component {
+class Friends extends Component {
 
     constructor(){
         super();
@@ -22,7 +26,7 @@ export default class Friends extends Component {
     render() {
         return (
             <View style={styles.main}>
-                <FriendList />
+                <FriendList  uid={this.props.user.uid}/>
                 <AddFriendButton navigation={this.props.navigation} action={this.toggleModal.bind(this)}/>
                 <Modal
                     transparent={true}
@@ -40,6 +44,14 @@ export default class Friends extends Component {
         );
     }
 }
+
+export default connect(store => ({
+    user: store.user
+  }),
+  (dispatch) => ({
+    actions: bindActionCreators(userActions, dispatch)
+  })
+  )(Friends);
 
 const styles = StyleSheet.create({
     main: {

@@ -1,19 +1,32 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, StatusBar } from 'react-native';
+
+import { bindActionCreators } from 'redux';
+import * as userActions from '../actions/userActions';
+import { connect } from 'react-redux';
+
 import EventList from '../containers/EventList';
 import AddButton from '../components/AddButton';
 
-export default class Events extends Component {
+class Events extends Component {
     render() {
         return (
             <View style={styles.main}>
                 <StatusBar barStyle='light-content' />
-                <EventList />
+                <EventList uid={this.props.user.uid}/>
                 <AddButton navigation={this.props.navigation}/>
             </View>
         );
     }
 }
+
+export default connect(store => ({
+    user: store.user
+  }),
+  (dispatch) => ({
+    actions: bindActionCreators(userActions, dispatch)
+  })
+  )(Events);
 
 const styles = StyleSheet.create({
     main: {

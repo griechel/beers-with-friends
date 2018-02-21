@@ -17,15 +17,10 @@ export default class ChatList extends Component {
     }
     
     // get user id, define db references and get data
-    async loadData(){   
-        var myKey = ''
-        try {
-            myKey = await AsyncStorage.getItem('myUID');
-            chatsRef = firebase.database().ref('chatList/' + myKey)
-            this.loadChats(chatsRef);
-        } catch (error) {
-          // Error retrieving data
-        }
+    loadData(){   
+        var myKey = this.props.uid
+        chatsRef = firebase.database().ref('chatList/' + myKey)
+        this.loadChats(chatsRef);
     }
 
     // retrieve groups from the Backend

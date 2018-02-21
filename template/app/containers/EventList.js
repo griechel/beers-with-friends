@@ -19,16 +19,11 @@ export default class EventList extends Component {
     }
     
     // get user id, define db references and get data
-    async loadData(){   
-        var myKey = ''
-        try {
-            myKey = await AsyncStorage.getItem('myUID');
-            invitesRef = firebase.database().ref('invites/' + myKey)
-            this.loadPrivateInvites(invitesRef);
-            this.loadPublicInvites(invitesRef);
-        } catch (error) {
-          // Error retrieving data
-        }
+    loadData(){   
+        var myKey = this.props.uid
+        invitesRef = firebase.database().ref('invites/' + myKey)
+        this.loadPrivateInvites(invitesRef);
+        this.loadPublicInvites(invitesRef);
     }
 
     // retrieve private invites from the Backend

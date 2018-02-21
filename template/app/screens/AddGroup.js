@@ -4,36 +4,24 @@ import { SearchBar } from 'react-native-elements';
 import { NavigationActions } from 'react-navigation';
 import firebase from 'firebase';
 
+import { bindActionCreators } from 'redux';
+import * as userActions from '../actions/userActions';
+import { connect } from 'react-redux';
+
 import AddGroupList from '../containers/AddGroupList';
 
-export default class AddGroup extends Component {
+class AddGroup extends Component {
 
     constructor(){
         super();
         this.state = {
             members: [],
             groupName:'',
-            myUID:''
-        }
-    }
-
-    componentDidMount() {
-        this.loadData();
-    }
-    
-    // get user id
-    async loadData(){   
-        var myKey = ''
-        try {
-            myKey = await AsyncStorage.getItem('myUID');
-            this.setState({myUID: myKey})
-        } catch (error) {
-          // Error retrieving data
         }
     }
 
     createGroup = () => {
-        var newGroupRef = firebase.database().ref('groups/' + this.state.myUID).push();
+        var newGroupRef = firebase.database().ref('groups/' + this.props.user.uid).push();
         var memberList = {};
         for (var i=0; i<this.state.members.length; i++) {
             memberList['members/' + this.state.members[i].id] = {
@@ -86,7 +74,7 @@ export default class AddGroup extends Component {
                     onChangeText={(name) => this.setState({ groupName: name })}
                 />
                 <View style={{flex:1}}>
-                    <AddGroupList onSelectUser={this.addUser}/>
+                    <AddGroupList onSelectUser={this.addUser} uid={this.props.user.uid}/>
                 </View>
                 {this.showBanner() && <View style={styles.banner}>
                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scroll}>
@@ -102,6 +90,14 @@ export default class AddGroup extends Component {
         );
     }
 }
+
+export default connect(store => ({
+    user: store.user
+  }),
+  (dispatch) => ({
+    actions: bindActionCreators(userActions, dispatch)
+  })
+  )(AddGroup);
 
 const styles = StyleSheet.create({
     main: {

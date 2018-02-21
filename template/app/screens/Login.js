@@ -11,6 +11,7 @@ import {
 import FBSDK, { LoginManager, AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 import { firebaseRef } from '../config/firebase';
 import firebase from 'firebase';
+
 import { bindActionCreators } from 'redux';
 import * as userActions from '../actions/userActions';
 import { connect } from 'react-redux';
@@ -163,8 +164,8 @@ class Login extends Component {
   }
 }
 
-export default connect(state => ({
-  user: state.user
+export default connect(store => ({
+  user: store.user
 }),
 (dispatch) => ({
   actions: bindActionCreators(userActions, dispatch)
