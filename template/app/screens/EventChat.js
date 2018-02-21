@@ -4,10 +4,14 @@ import { SearchBar } from 'react-native-elements';
 import { GiftedChat } from 'react-native-gifted-chat';
 import firebase from 'firebase';
 
-export default class EventChat extends Component {
+import { bindActionCreators } from 'redux';
+import * as userActions from '../actions/userActions';
+import { connect } from 'react-redux';
+
+class EventChat extends Component {
     
-    messagesRef = firebase.database().ref('messages/' + this.props.navigation.state.params.eventID);
-    chatListRef = firebase.database().ref('chatList').orderByChild(this.props.navigation.state.params.eventID).equalTo(this.props.navigation.state.params.eventID)
+    messagesRef = firebase.database().ref('messages/' + this.props.event.id);
+    chatListRef = firebase.database().ref('chatList').orderByChild(this.props.event.id).equalTo(this.props.event.id)
 
     constructor(props){
         super(props);
@@ -60,15 +64,24 @@ export default class EventChat extends Component {
             <GiftedChat
                 messages={this.state.messages}
                 onSend={(message) => this.sendMessage(message)}
-                loadEarlier={true}
+                //loadEarlier={true}
                 user={{
-                _id: 1,
-                name: 'Cole'
+                _id: this.props.user.uid,
+                name: this.props.user.first_name
                 }}
             />
         );
       }
 }
+
+export default connect(store => ({
+  user: store.user,
+  event: store.event
+}),
+(dispatch) => ({
+  actions: bindActionCreators(userActions, dispatch)
+})
+)(EventChat);
 
 const styles = StyleSheet.create({
 

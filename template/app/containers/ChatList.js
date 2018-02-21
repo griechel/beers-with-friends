@@ -18,7 +18,7 @@ export default class ChatList extends Component {
     
     // get user id, define db references and get data
     loadData(){   
-        var myKey = this.props.uid
+        var myKey = this.props.user.uid
         chatsRef = firebase.database().ref('chatList/' + myKey)
         this.loadChats(chatsRef);
     }
@@ -43,9 +43,14 @@ export default class ChatList extends Component {
         });
     }
 
+    handlePress(item) {
+        this.props.setTargetEvent(item.id)
+        this.props.navigation.navigate('EventChat',{eventID: item.id})
+    }
+
     _renderEvent = ({item}) => {
         return(
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('EventChat',{eventID: item.id})}>
+            <TouchableOpacity onPress={() => this.handlePress(item)}>
                 <ChatItem id={item.id} title={item.title} lastMessage={item.lastMessage} date={item.date}/>
             </TouchableOpacity>
         );

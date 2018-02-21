@@ -1,20 +1,15 @@
 import * as types from '../actions/actionTypes';
 
 const initialState = {
-  count: 0
+  id:''
 };
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case types.INCREMENT:
+      case types.SET_TARGET_EVENT:
       return {
         ...state,
-        count: state.count + 1
-      };
-    case types.DECREMENT:
-      return {
-        ...state,
-        count: state.count - 1
+        id: action.payload
       };
     default:
       return state;

@@ -3,7 +3,7 @@ import { View, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-nati
 import { NavigationActions } from 'react-navigation';
 
 import { bindActionCreators } from 'redux';
-import * as userActions from '../actions/userActions';
+import * as eventActions from '../actions/eventActions';
 import { connect } from 'react-redux';
 
 import ChatList from '../containers/ChatList';
@@ -15,7 +15,7 @@ class Chat extends Component {
     render() {
         return (
             <View style={styles.main}>
-                <ChatList navigation={this.props.navigation} uid={this.props.user.uid}/>
+                <ChatList navigation={this.props.navigation} user={this.props.user} {...this.props.actions}/>
             </View>
         );
     }
@@ -26,7 +26,7 @@ export default connect(store => ({
     user: store.user
   }),
   (dispatch) => ({
-    actions: bindActionCreators(userActions, dispatch)
+    actions: bindActionCreators(eventActions, dispatch)
   })
   )(Chat);
 

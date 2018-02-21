@@ -8,7 +8,7 @@ const initialState = {
   dp:'',
 };
 
-export default function counter(state = initialState, action = {}) {
+export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case types.SET_USER_NAME:
       return {
