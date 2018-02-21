@@ -11,8 +11,11 @@ import {
 import FBSDK, { LoginManager, AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 import { firebaseRef } from '../config/firebase';
 import firebase from 'firebase';
+import { bindActionCreators } from 'redux';
+import * as userActions from '../actions/userActions';
+import { connect } from 'react-redux';
 
-export default class Login extends Component {
+class Login extends Component {
 
   constructor(){
     super();
@@ -31,6 +34,7 @@ export default class Login extends Component {
           if (user != null) {
             this.firebaseRef.child(auth.uid).off('value')
             this.setState({ showSpinner: false })
+            this.props.actions.storeUser(user)
             this.props.navigation.navigate('Tabs');
           }
         })
@@ -158,6 +162,14 @@ export default class Login extends Component {
     );
   }
 }
+
+export default connect(state => ({
+  user: state.user
+}),
+(dispatch) => ({
+  actions: bindActionCreators(userActions, dispatch)
+})
+)(Login);
 
 const styles = StyleSheet.create({
   container: {

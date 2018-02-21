@@ -1,20 +1,27 @@
 import * as types from '../actions/actionTypes';
 
 const initialState = {
-  count: 0
+  first_name:'',
+  last_name:'',
+  name:'',
+  uid:'',
+  dp:'',
 };
 
 export default function counter(state = initialState, action = {}) {
   switch (action.type) {
-    case types.INCREMENT:
+    case types.SET_USER_NAME:
       return {
         ...state,
-        count: state.count + 1
+        name: action.payload
       };
-    case types.DECREMENT:
+      case types.STORE_USER:
       return {
         ...state,
-        count: state.count - 1
+        first_name: action.payload.first_name,
+        last_name: action.payload.last_name,
+        uid: action.payload.uid,
+        dp: action.payload.dp
       };
     default:
       return state;

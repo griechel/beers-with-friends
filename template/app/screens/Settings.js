@@ -2,29 +2,28 @@ import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { bindActionCreators } from 'redux';
 import Counter from '../components/Counter';
-import * as userActions from '../actions/userActions';
+import * as counterActions from '../actions/counterActions';
 import { connect } from 'react-redux';
 
 class Settings extends Component {
-    constructor(props) {
-        super(props);
-      }
     
     render() {
-        const { state, actions } = this.props;
+        const { counter, user, actions } = this.props;
         return (
           <Counter
-            counter={state.count}
+            counter={counter.count}
+            user={user}
             {...actions} />
         );
       }
 }
 
 export default connect(state => ({
-    state: state.user
+    counter: state.counter,
+    user: state.user
   }),
   (dispatch) => ({
-    actions: bindActionCreators(userActions, dispatch)
+    actions: bindActionCreators(counterActions, dispatch)
   })
 )(Settings);
 
