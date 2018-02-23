@@ -31,27 +31,24 @@ export default class FriendList extends Component {
         this.loadFriends(friendsRef);
     }
 
-    // retrieve groups from the Backend
     loadGroups = (groupsRef) => {
-        groupsRef.once('value', (snap) => {
+        groupsRef.on('value', (snap) => {
             var tempArray =[];
             this.getItems(snap, tempArray);
             this.setState({groups: tempArray});
         });
     }
 
-    // retrieve best friends from the Backend
     loadBestFriends = (friendsRef) => {
-        friendsRef.orderByChild('best').equalTo(true).once('value', (snap) => {
+        friendsRef.orderByChild('best').equalTo(true).on('value', (snap) => {
             var tempArray =[];
             this.getItems(snap, tempArray);
             this.setState({bestFriends: tempArray});
         });
     }
 
-    // retrieve friends from the Backend
     loadFriends = (friendsRef) => {
-        friendsRef.orderByChild('best').equalTo(false).once('value', (snap) => {
+        friendsRef.orderByChild('best').equalTo(false).on('value', (snap) => {
             var tempArray =[];
             this.getItems(snap, tempArray);
             this.setState({friends: tempArray});
@@ -68,14 +65,34 @@ export default class FriendList extends Component {
         });
     }
 
+    demoteFriend(friendID) {
+        var friendRef = firebase.database().ref('friends/' + this.props.uid + '/' + friendID)
+        friendRef.update({best: false})
+    }
+
+    promoteFriend(friendID) {
+        var friendRef = firebase.database().ref('friends/' + this.props.uid + '/' + friendID)
+        friendRef.update({best: true})
+    }
+
     _renderGroups = ({item}) => {
+
+        groupBtns = [
+            {
+                text:'Edit',
+                backgroundColor:'green'
+            },
+            {
+                text:'Delete',
+                backgroundColor:'red'
+            }
+        ]
+
         return(
             <View>
                 <FriendItem 
-                    name={item.name} 
-                    title={item.title} 
-                    picture={item.picture} 
-                    type={item.type} 
+                    name={item.name}
+                    picture={item.picture}
                     swipeoutBtns={groupBtns}
                 />
             </View>
@@ -83,13 +100,20 @@ export default class FriendList extends Component {
     }
 
     _renderBestFriends = ({item}) => {
+
+        bestFriendBtns = [
+            {
+                text:'Remove',
+                backgroundColor:'orange',
+                onPress: () => this.demoteFriend(item.id)
+            }
+        ]
+
         return(
             <View>
                 <FriendItem 
                     name={item.name} 
-                    title={item.title} 
-                    picture={item.picture} 
-                    type={item.type} 
+                    picture={item.picture}
                     swipeoutBtns={bestFriendBtns}
                 />
             </View>
@@ -97,13 +121,25 @@ export default class FriendList extends Component {
     }
 
     _renderFriends = ({item}) => {
+
+        friendBtns = [
+            {
+                text:'Delete',
+                backgroundColor:'red',
+                //onPress: () => this.promoteFriend(item.id)
+            },
+            {
+                text:'Best',
+                backgroundColor:'blue',
+                onPress: () => this.promoteFriend(item.id)
+            }
+        ]
+
         return(
             <View>
                 <FriendItem 
                     name={item.name} 
-                    title={item.title} 
-                    picture={item.picture} 
-                    type={item.type} 
+                    picture={item.picture}
                     swipeoutBtns={friendBtns}
                 />
             </View>
@@ -147,31 +183,6 @@ export default class FriendList extends Component {
         );
     }
 }
-
-const groupBtns = [
-    {
-        text:'Edit',
-        backgroundColor:'green'
-    },
-    {
-        text:'Delete',
-        backgroundColor:'red'
-    }
-]
-
-const bestFriendBtns = [
-    {
-        text:'Remove',
-        backgroundColor:'orange'
-    }
-]
-
-const friendBtns = [
-    {
-        text:'Delete',
-        backgroundColor:'red'
-    }
-]
 
 const styles = StyleSheet.create({
     main: {

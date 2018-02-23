@@ -25,7 +25,7 @@ export default class ChatList extends Component {
 
     // retrieve groups from the Backend
     loadChats = (chatsRef) => {
-        chatsRef.once('value', (snap) => {
+        chatsRef.on('value', (snap) => {
             var tempArray =[];
             this.getItems(snap, tempArray);
             this.setState({chats: tempArray});

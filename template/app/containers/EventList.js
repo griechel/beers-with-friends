@@ -20,7 +20,7 @@ export default class EventList extends Component {
     
     // get user id, define db references and get data
     loadData(){   
-        var myKey = this.props.uid
+        var myKey = this.props.user.uid
         invitesRef = firebase.database().ref('invites/' + myKey)
         this.loadPrivateInvites(invitesRef);
         this.loadPublicInvites(invitesRef);
@@ -28,7 +28,7 @@ export default class EventList extends Component {
 
     // retrieve private invites from the Backend
     loadPrivateInvites = (invitesRef) => {
-        invitesRef.orderByChild('public').equalTo(false).once('value', (snap) => {
+        invitesRef.orderByChild('public').equalTo(false).on('value', (snap) => {
             var tempArray =[];
             this.getItems(snap, tempArray);
             this.setState({privateInvites: tempArray});
@@ -37,7 +37,7 @@ export default class EventList extends Component {
 
      // retrieve public invites from the Backend
      loadPublicInvites = (invitesRef) => {
-        invitesRef.orderByChild('public').equalTo(true).once('value', (snap) => {
+        invitesRef.orderByChild('public').equalTo(true).on('value', (snap) => {
             var tempArray =[];
             this.getItems(snap, tempArray);
             this.setState({publicInvites: tempArray});
@@ -58,7 +58,7 @@ export default class EventList extends Component {
     renderEvent = ({item}) => {
         return(
             <View>
-                <EventItem name={item.members} body={item.name} time={item.date}/>
+                <EventItem name={item.members} body={item.name} time={item.date} id={item.id} user={this.props.user}/>
             </View>
         );
     }

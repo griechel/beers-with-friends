@@ -13,7 +13,7 @@ class Events extends Component {
         return (
             <View style={styles.main}>
                 <StatusBar barStyle='light-content' />
-                <EventList uid={this.props.user.uid}/>
+                <EventList user={this.props.user}/>
                 <AddButton navigation={this.props.navigation}/>
             </View>
         );

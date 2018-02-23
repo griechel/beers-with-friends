@@ -62,7 +62,7 @@ class Login extends Component {
       AccessToken.getCurrentAccessToken().then(
         (data) => {
           const token = data.accessToken
-          fetch('https://graph.facebook.com/v2.8/me?fields=id,first_name,last_name&access_token=' + token)
+          fetch('https://graph.facebook.com/v2.8/me?fields=id,first_name,last_name,name&access_token=' + token)
             .then((response) => response.json())
             .then((json) => {
               const imageSize = 120
@@ -99,6 +99,7 @@ class Login extends Component {
       dp
     }
     firebase.database().ref('users').child(uid).update({ ...userData, ...defaults })
+      // stores user id in local device storage. not sure if i still need this
       .then((user) => {
         firebase.database().ref('users').child(uid).once('value')
           .then(async (snapshot) => {
@@ -107,7 +108,6 @@ class Login extends Component {
           } catch (error) {
             // Error saving data
           }
-          alert(snapshot.val().uid)
         })
       })
 

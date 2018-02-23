@@ -13,7 +13,7 @@ export default class FriendItem extends Component {
 
     render(){
         return(
-            <Swipeout right={this.props.swipeoutBtns} backgroundColor='white'>
+            <Swipeout right={this.props.swipeoutBtns} backgroundColor='white' autoClose={true}> 
                 <View style={styles.main}>
                     <View style={styles.box1}>
                         <Avatar 

@@ -16,7 +16,6 @@ class CreateEventInvites extends Component {
             eventName:this.props.navigation.state.params.event,
             eventTime:this.props.navigation.state.params.time,
             members: [],
-            myUID:'',
             public: true
         }
     }
@@ -30,7 +29,9 @@ class CreateEventInvites extends Component {
                 //picture: this.state.members[i].picture
             }
         };
-        updateList['members/' + this.props.user.uid] = true;
+        updateList['members/' + this.props.user.uid] = {
+            name: this.props.user.first_name + ' ' + this.props.user.last_name
+        };
         updateList['name'] = this.state.eventName;
         updateList['time'] = this.state.eventTime;
         updateList['public'] = this.state.public;
