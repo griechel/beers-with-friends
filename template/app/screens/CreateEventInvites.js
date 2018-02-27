@@ -22,20 +22,29 @@ class CreateEventInvites extends Component {
 
     createEvent = () => {
         var newEventRef = firebase.database().ref('events/').push();
-        var updateList = {};
+        var newInviteRef = firebase.database().ref('invites');
+        var updateEventList = {};
+        var updateInviteList = {};
         for (var i=0; i<this.state.members.length; i++) {
-            updateList['members/' + this.state.members[i].id] = {
+            updateEventList['members/' + this.state.members[i].id] = {
                 name: this.state.members[i].name,
                 //picture: this.state.members[i].picture
             }
+            updateInviteList[this.state.members[i].id + '/' + newEventRef.key] = {
+                name: this.state.eventName,
+                date: this.state.eventTime,
+                members: this.props.user.first_name,
+                public: false
+            }
         };
-        updateList['members/' + this.props.user.uid] = {
+        updateEventList['members/' + this.props.user.uid] = {
             name: this.props.user.first_name + ' ' + this.props.user.last_name
         };
-        updateList['name'] = this.state.eventName;
-        updateList['time'] = this.state.eventTime;
-        updateList['public'] = this.state.public;
-        newEventRef.update(updateList);
+        updateEventList['name'] = this.state.eventName;
+        updateEventList['time'] = this.state.eventTime;
+        updateEventList['public'] = this.state.public;
+        newEventRef.update(updateEventList);
+        newInviteRef.update(updateInviteList);
         
         var eventMetaRef = firebase.database().ref('chatList/' + this.props.user.uid).child(newEventRef.key).update({
             name: this.state.eventName,

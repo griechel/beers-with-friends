@@ -35,6 +35,11 @@ export default class FriendList extends Component {
         groupsRef.on('value', (snap) => {
             var tempArray =[];
             this.getItems(snap, tempArray);
+            if (tempArray.length == 0) {
+                tempArray.push({
+                    name: 'You Have No Groups'
+                })
+            };
             this.setState({groups: tempArray});
         });
     }
@@ -43,6 +48,11 @@ export default class FriendList extends Component {
         friendsRef.orderByChild('best').equalTo(true).on('value', (snap) => {
             var tempArray =[];
             this.getItems(snap, tempArray);
+            if (tempArray.length == 0) {
+                tempArray.push({
+                    name: 'You Have Not Selected Any Best Friends'
+                })
+            };
             this.setState({bestFriends: tempArray});
         });
     }
@@ -51,6 +61,11 @@ export default class FriendList extends Component {
         friendsRef.orderByChild('best').equalTo(false).on('value', (snap) => {
             var tempArray =[];
             this.getItems(snap, tempArray);
+            if (tempArray.length == 0) {
+                tempArray.push({
+                    name: 'Damn You Are Lonely'
+                })
+            };
             this.setState({friends: tempArray});
         });
     }
@@ -75,6 +90,11 @@ export default class FriendList extends Component {
         friendRef.update({best: true})
     }
 
+    deleteGroup(groupID) {
+        var groupRef = firebase.database().ref('groups/' + this.props.uid + '/' + groupID)
+        groupRef.remove()
+    }
+
     _renderGroups = ({item}) => {
 
         groupBtns = [
@@ -84,7 +104,8 @@ export default class FriendList extends Component {
             },
             {
                 text:'Delete',
-                backgroundColor:'red'
+                backgroundColor:'red',
+                onPress: () => this.deleteGroup(item.id)
             }
         ]
 
@@ -123,11 +144,11 @@ export default class FriendList extends Component {
     _renderFriends = ({item}) => {
 
         friendBtns = [
-            {
+            /*{
                 text:'Delete',
                 backgroundColor:'red',
                 //onPress: () => this.promoteFriend(item.id)
-            },
+            },*/
             {
                 text:'Best',
                 backgroundColor:'blue',
