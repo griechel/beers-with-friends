@@ -15,7 +15,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         name: action.payload
       };
-      case types.STORE_USER:
+    case types.STORE_USER:
       return {
         ...state,
         first_name: action.payload.first_name,

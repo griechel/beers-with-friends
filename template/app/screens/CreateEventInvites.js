@@ -38,7 +38,8 @@ class CreateEventInvites extends Component {
             }
         };
         updateEventList['members/' + this.props.user.uid] = {
-            name: this.props.user.first_name + ' ' + this.props.user.last_name
+            name: this.props.user.first_name + ' ' + this.props.user.last_name,
+            status: true
         };
         updateEventList['name'] = this.state.eventName;
         updateEventList['time'] = this.state.eventTime;

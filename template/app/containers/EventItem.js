@@ -5,7 +5,7 @@ import Swipeout from 'react-native-swipeout';
 import firebase from 'firebase';
 
 export default class EventItem extends Component {
-    
+
     accept() {
         var inviteRef = firebase.database().ref('invites/' + this.props.user.uid + '/' + this.props.id)
         var chatListRef = firebase.database().ref('chatList/' + this.props.user.uid + '/' + this.props.id)
@@ -17,7 +17,8 @@ export default class EventItem extends Component {
             lastSender: this.props.user.first_name
         }) 
         eventsRef.update({
-            name: this.props.user.first_name + ' ' + this.props.user.last_name
+            name: this.props.user.first_name + ' ' + this.props.user.last_name,
+            status: true
         })
         inviteRef.remove()
     }

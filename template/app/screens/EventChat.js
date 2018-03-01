@@ -29,6 +29,10 @@ class EventChat extends Component {
           });
         });
       }
+
+      componentWillUnmount() {
+        this.messagesRef.off()
+      }
       
       // retrieve the messages from the Backend
       loadMessages(callback) {

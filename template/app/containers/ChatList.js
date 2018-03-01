@@ -45,7 +45,7 @@ export default class ChatList extends Component {
 
     handlePress(item) {
         this.props.setTargetEvent(item.id)
-        this.props.navigation.navigate('EventChat',{eventID: item.id})
+        this.props.navigation.navigate('EventChat')
     }
 
     _renderEvent = ({item}) => {
