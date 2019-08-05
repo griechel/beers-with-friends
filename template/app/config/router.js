@@ -1,5 +1,5 @@
 import React from 'react';
-import { TabNavigator, StackNavigator, DrawerNavigator } from 'react-navigation';
+import { TabNavigator, StackNavigator} from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import SettingsButton from '../components/SettingsButton';
 import CancelButton from '../components/CancelButton';
@@ -51,22 +51,6 @@ export const EventsStack = StackNavigator({
     }
 });
 
-export const EventChatStack = DrawerNavigator({
-    EventChat: {
-        screen: EventChat,
-        navigationOptions: {
-            title: 'Message',
-            headerStyle: { backgroundColor:'rgb(28,135,206)'},
-            headerTitleStyle: { color:'white'},
-            headerTintColor:'white',
-            gesturesEnabled:false,
-            tabBarVisible:false
-        }
-    }
-    }, {
-        drawerPosition:'right',
-});
-
 export const ChatStack = StackNavigator({
     Chat: {
         screen: Chat,
@@ -77,13 +61,15 @@ export const ChatStack = StackNavigator({
             headerRight: <SettingsButton navigation={navigation}/>
         })
     },
-    EventChatStack: {
-        screen: EventChatStack,
+    EventChat: {
+        screen: EventChat,
         navigationOptions: {
-            // title: 'Override',
+            title: 'Message',
             headerStyle: { backgroundColor:'rgb(28,135,206)'},
             headerTitleStyle: { color:'white'},
             headerTintColor:'white',
+            gesturesEnabled:false,
+            tabBarVisible:false
         }
     }
 });
