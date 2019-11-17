@@ -2,12 +2,14 @@ import React from 'react';
 import { TabNavigator, StackNavigator} from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import SettingsButton from '../components/SettingsButton';
+import DetailsButton from '../components/DetailsButton';
 import CancelButton from '../components/CancelButton';
 
 import Events from '../screens/Events';
 import Friends from '../screens/Friends';
 import Chat from '../screens/Chat';
 import EventChat from '../screens/EventChat';
+import EventChatDetails from '../screens/EventChatDetails';
 import CreateEvent from '../screens/CreateEvent';
 import CreateEventTime from '../screens/CreateEventTime';
 import CreateEventInvites from '../screens/CreateEventInvites';
@@ -63,14 +65,23 @@ export const ChatStack = StackNavigator({
     },
     EventChat: {
         screen: EventChat,
-        navigationOptions: {
+        navigationOptions: ({navigation}) => ({
             title: 'Message',
             headerStyle: { backgroundColor:'rgb(28,135,206)'},
             headerTitleStyle: { color:'white'},
             headerTintColor:'white',
-            gesturesEnabled:false,
-            tabBarVisible:false
-        }
+            tabBarVisible:false,
+            headerRight: <DetailsButton navigation={navigation}/>
+        })
+    },
+    EventChatDetails: {
+        screen: EventChatDetails,
+        navigationOptions: ({navigation}) => ({
+            title: 'Details',
+            headerStyle: { backgroundColor:'rgb(28,135,206)'},
+            headerTitleStyle: { color:'white'},
+            headerTintColor:'white'
+        })
     }
 });
 
